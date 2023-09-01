@@ -26,9 +26,9 @@ You can make your own Vault Docker Lab with Docker, Terraform, and the Terraform
 
 To make a Vault Docker Lab, your host computer must have the following software installed:
 
-- [Docker](https://www.docker.com/products/docker-desktop/) (tested with Docker Desktop version 4.14.0 on macOS version 12.6.1)
+- [Docker](https://www.docker.com/products/docker-desktop/) (tested with Docker Desktop version 4.22.1 on macOS version 13.5.1)
 
-- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.3.5 darwin_arm64 on macOS version 12.6.1)
+- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.5.6 darwin_arm64 on macOS version 13.5.1)
 
 > **NOTE:** Vault Docker Lab is currently known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors.
 
@@ -173,35 +173,6 @@ There are just a handful of steps to make your own Vault Docker Lab.
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value.
 
-## Cleanup
-
-To clean up Docker containers and all generated artifacts, **including audit device log files**:
-
-```shell
-make clean
-```
-
-To clean up **everything** including Terraform runtime configuration and state:
-
-```shell
-make cleanest
-```
-
-To remove the CA certificate from your OS trust store:
-
-- For macOS:
-
-  ```shell
-  sudo security delete-certificate -c "vault-docker-lab Intermediate Authority"
-  # no output expected
-  ```
-
-  - You will be prompted for your user password; enter it to add the certificate.
-
-- For Linux:
-
-  - Follow the documentation for your specific Linux distribution to remove the certificate.
-
 ## Notes
 
 The following notes should help you better understand the container structure Vault Docker Lab uses, along with tips on commonly used features.
@@ -272,12 +243,56 @@ The default Vault server log level is Info, but you can specify another log leve
 TF_VAR_vault_log_level=Debug make
 ```
 
+### Stage a cluster
+
+By default, vault-docker-lab automatically initializes and unseals Vault. If you'd rather perform these steps yourself, you can specify that they're skipped.
+
+Stage a cluster.
+
+```shell
+make stage
+```
+
 ### Docker resource usage
 
 The screenshot shows a Vault Docker Lab that has been up but idle for 25 minutes.
 
 <img width="732" alt="2023-09-01_14-04-54" src="https://github.com/hashicorp-education/learn-vault-docker-lab/assets/77563/5ff76eed-7c70-4bdd-bca2-3a478d878b10">
 
+### Cleanup
+
+To clean up Docker containers and all generated artifacts, **including audit device log files**:
+
+```shell
+make clean
+```
+
+To clean up **everything** including Terraform runtime configuration and state:
+
+```shell
+make cleanest
+```
+
+To remove the CA certificate from your OS trust store:
+
+- For macOS:
+
+  ```shell
+  sudo security delete-certificate -c "vault-docker-lab Intermediate Authority"
+  # no output expected
+  ```
+
+  - You will be prompted for your user password; enter it to add the certificate.
+
+- For Linux:
+
+  - Follow the documentation for your specific Linux distribution to remove the certificate.
+
+Unset related environment variables.
+
+```shell
+unset TF_VAR_vault_edition F_VAR_vault_license TF_VAR_vault_version VAULT_ADDR
+```
 
 ## Help and reference
 
