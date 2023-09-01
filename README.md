@@ -42,7 +42,7 @@ There are just a handful of steps to make your own Vault Docker Lab.
    git clone https://github.com/hashicorp-education/learn-vault-docker-lab.git
    ```
 
-1. `cd vault-docker-lab`
+1. `cd learn-vault-docker-lab`
 
 1. Add the Vault Docker Lab Certificate Authority certificate to your operating system trust store:
 
