@@ -272,6 +272,13 @@ The default Vault server log level is Info, but you can specify another log leve
 TF_VAR_vault_log_level=Debug make
 ```
 
+### Docker resource usage
+
+The screenshot shows a Vault Docker Lab that has been up but idle for 25 minutes.
+
+<img width="732" alt="2023-09-01_14-04-54" src="https://github.com/hashicorp-education/learn-vault-docker-lab/assets/77563/5ff76eed-7c70-4bdd-bca2-3a478d878b10">
+
+
 ## Help and reference
 
 A great resource for learning more about Vault is the [HashiCorp Developer](https://developer.hashicorp.com) site, which has a nice [Vault tutorial library](https://developer.hashicorp.com/tutorials/library?product=vault) available.
