@@ -1,20 +1,24 @@
 MY_NAME_IS := [vault-docker-lab]
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 UNAME := $$(uname)
-VAULTINI_AUDIT_LOGS = ./containers/vault_docker_lab_?/logs/*
-VAULTINI_DATA = ./containers/vault_docker_lab_?/data/*
-VAULTINI_INIT = ./.vault_docker_lab_?_init
-VAULTINI_LOG_FILE = ./vault_docker_lab.log
+VAULT_DOCKER_LAB_AUDIT_LOGS = ./containers/vault_docker_lab_?/logs/*
+VAULT_DOCKER_LAB_DATA = ./containers/vault_docker_lab_?/data/*
+VAULT_DOCKER_LAB_INIT = ./.vault_docker_lab_?_init
+VAULT_DOCKER_LAB_LOG_FILE = ./vault_docker_lab.log
 
 default: all
 
 all: prerequisites provision vault_status unseal_nodes audit_device done
 
-stage: prerequisites provision vault_status
+stage: prerequisites provision done-stage
 
 done:
 	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"
 	@echo "$(MY_NAME_IS) Login to Vault with initial root token: vault login $$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}')"
+
+done-stage:
+	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"
+	@echo "$(MY_NAME_IS) Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use."
 
 DOCKER_OK=$$(docker info > /dev/null 2>&1; printf $$?)
 TERRAFORM_BINARY_OK=$$(which terraform > /dev/null 2>&1 ; printf $$?)
@@ -27,26 +31,26 @@ prerequisites:
 provision:
 	@if [ "$(UNAME)" = "Linux" ]; then echo "$(MY_NAME_IS) [Linux] Setting ownership on container volume directories ..."; echo "$(MY_NAME_IS) [Linux] You could be prompted for your user password by sudo."; sudo chown -R $$USER:$$USER containers; sudo chmod -R 0777 containers; fi
 	@printf "$(MY_NAME_IS) Initializing Terraform workspace ..."
-	@terraform init > $(VAULTINI_LOG_FILE)
+	@terraform init > $(VAULT_DOCKER_LAB_LOG_FILE)
 	@echo 'Done.'
 	@printf "$(MY_NAME_IS) Applying Terraform configuration ..."
-	@terraform apply -auto-approve >> $(VAULTINI_LOG_FILE)
+	@terraform apply -auto-approve >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@echo 'Done.'
 
 UNSEAL_KEY=$$(grep 'Unseal Key 1' ./.vault_docker_lab_1_init | awk '{print $$NF}')
 unseal_nodes:
 	@printf "$(MY_NAME_IS) Unsealing cluster nodes ..."
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8220 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
-	@VAULT_ADDR=https://127.0.0.1:8220 vault operator unseal $(UNSEAL_KEY) >> $(VAULTINI_LOG_FILE)
+	@VAULT_ADDR=https://127.0.0.1:8220 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@printf 'vault_docker_lab_2. '
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8230 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
-	@VAULT_ADDR=https://127.0.0.1:8230 vault operator unseal $(UNSEAL_KEY) >> $(VAULTINI_LOG_FILE)
+	@VAULT_ADDR=https://127.0.0.1:8230 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@printf 'vault_docker_lab_3. '
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8240 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
-	@VAULT_ADDR=https://127.0.0.1:8240 vault operator unseal $(UNSEAL_KEY) >> $(VAULTINI_LOG_FILE)
+	@VAULT_ADDR=https://127.0.0.1:8240 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@printf 'vault_docker_lab_4. '
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8250 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
-	@VAULT_ADDR=https://127.0.0.1:8250 vault operator unseal $(UNSEAL_KEY) >> $(VAULTINI_LOG_FILE)
+	@VAULT_ADDR=https://127.0.0.1:8250 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@printf 'vault_docker_lab_5. '
 	@echo 'Done.'
 
@@ -67,13 +71,13 @@ vault_status:
 clean:
 	@if [ "$(UNAME)" = "Linux" ]; then echo "$(MY_NAME_IS) [Linux] Setting ownership on container volume directories ..."; echo "$(MY_NAME_IS) [Linux] You could be prompted for your user password by sudo."; sudo chown -R $$USER:$$USER containers; fi
 	@printf "$(MY_NAME_IS) Destroying Terraform configuration ..."
-	@terraform destroy -auto-approve >> $(VAULTINI_LOG_FILE)
+	@terraform destroy -auto-approve >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@echo 'Done.'
-	@printf "$(MY_NAME_IS) Removing artifacts created by Vaultini ..."
-	@rm -rf $(VAULTINI_DATA)
-	@rm -f $(VAULTINI_INIT)
-	@rm -rf $(VAULTINI_AUDIT_LOGS)
-	@rm -f $(VAULTINI_LOG_FILE)
+	@printf "$(MY_NAME_IS) Removing artifacts created by VAULT_DOCKER_LAB ..."
+	@rm -rf $(VAULT_DOCKER_LAB_DATA)
+	@rm -f $(VAULT_DOCKER_LAB_INIT)
+	@rm -rf $(VAULT_DOCKER_LAB_AUDIT_LOGS)
+	@rm -f $(VAULT_DOCKER_LAB_LOG_FILE)
 	@echo 'Done.'
 
 cleanest: clean

@@ -75,15 +75,15 @@ There are just a handful of steps to make your own Vault Docker Lab.
         From within this repository directory, copy the Vault Docker Lab CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
-        sudo cp ./containers/vaultini1/certs/vault-docker-lab.pem \
-            /usr/local/share/ca-certificates/vault-docker-lab.crt
+        sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
+            /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
         # No output expected
         ```
 
         Append the certificates to the file `/etc/ssl/certs/ca-certificates.crt`.
 
         ```shell
-        sudo sh -c "cat /usr/local/share/ca-certificates/vault-docker-lab.crt >> /etc/ssl/certs/ca-certificates.crt"
+        sudo sh -c "cat /usr/local/share/ca-certificates/vault_docker_lab_ca.crt >> /etc/ssl/certs/ca-certificates.crt"
         # No output expected
         ```
 
@@ -161,14 +161,14 @@ There are just a handful of steps to make your own Vault Docker Lab.
 1. Type `make` and press `[return]`; successful output resembles this example, and includes the initial root token value (for the sake of convenience and ease of use):
 
    ```plaintext
-   [vaultini] Initializing Terraform workspace ...Done.
-   [vaultini] Applying Terraform configuration ...Done.
-   [vaultini] Checking Vault active node status ...Done.
-   [vaultini] Checking Vault initialization status ...Done.
-   [vaultini] Unsealing cluster nodes .....vaultini2. vaultini3. vaultini4. vaultini5. Done.
-   [vaultini] Enable audit device ...Done.
-   [vaultini] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-   [vaultini] Login to Vault with initial root token: vault login hvs.E5DA1IvLTq9y1q8p1Oc0ff33
+   [vault-docker-lab] Initializing Terraform workspace ...Done.
+   [vault-docker-lab] Applying Terraform configuration ...Done.
+   [vault-docker-lab] Checking Vault active node status ...Done.
+   [vault-docker-lab] Checking Vault initialization status ...Done.
+   [vault-docker-lab] Unsealing cluster nodes .....vault_docker_lab_2. vault_docker_lab_3. vault_docker_lab_4. vault_docker_lab_5. Done.
+   [vault-docker-lab] Enable audit device ...Done.
+   [vault-docker-lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+   [vault-docker-lab] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
    ```
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value.
@@ -253,6 +253,15 @@ Stage a cluster.
 make stage
 ```
 
+Example output:
+
+```plaintext
+[vault-docker-lab] Initializing Terraform workspace ...Done.
+[vault-docker-lab] Applying Terraform configuration ...Done.
+[vault-docker-lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+[vault-docker-lab] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
+```
+
 ### Docker resource usage
 
 The screenshot shows a Vault Docker Lab that has been up but idle for 25 minutes.
@@ -267,10 +276,25 @@ To clean up Docker containers and all generated artifacts, **including audit dev
 make clean
 ```
 
+Example output:
+
+```plaintext
+[vault-docker-lab] Destroying Terraform configuration ...Done.
+[vault-docker-lab] Removing artifacts created by Vault Docker Lab ...Done.
+```
+
 To clean up **everything** including Terraform runtime configuration and state:
 
 ```shell
 make cleanest
+```
+
+Example output:
+
+```plaintext
+[vault-docker-lab] Destroying Terraform configuration ...Done.
+[vault-docker-lab] Removing artifacts created by Vault Docker Lab ...Done.
+[vault-docker-lab] Removing all Terraform runtime configuration and state ...Done.
 ```
 
 To remove the CA certificate from your OS trust store:
