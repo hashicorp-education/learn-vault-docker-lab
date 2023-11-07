@@ -16,7 +16,7 @@ Vault Docker Lab is a minimal 5-node [Vault](https://www.vaultproject.io) cluste
 
 ## Why?
 
-To quickly establish a containerized Vault cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, and testing.
+To quickly establish a local Vault cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, and testing.
 
 ## How?
 
@@ -42,9 +42,13 @@ There are just a handful of steps to make your own Vault Docker Lab.
    git clone https://github.com/hashicorp-education/learn-vault-docker-lab.git
    ```
 
-1. `cd learn-vault-docker-lab`
+1. Change into the lab directory.
 
-1. Add the Vault Docker Lab Certificate Authority certificate to your operating system trust store:
+   ```shell
+   cd learn-vault-docker-lab
+   ```
+
+1. Add the Vault Docker Lab Certificate Authority certificate to your operating system trust store.
 
    - For macOS:
 
@@ -158,7 +162,7 @@ There are just a handful of steps to make your own Vault Docker Lab.
         # No output expected
         ```
 
-1. Type `make` and press `[return]`; successful output resembles this example, and includes the initial root token value (for the sake of convenience and ease of use):
+1. Type `make` and press `[return]`; successful output resembles this example, and includes the initial root token value (for the sake of convenience and ease of use).
 
    ```plaintext
    [vault-docker-lab] Initializing Terraform workspace ...Done.
@@ -203,7 +207,7 @@ containers/vault_docker_lab_1
 
 ### Run a specific Vault version
 
-Vault Docker Lab tries to keep current and offer the latest available Vault Docker image version, but you can also run a specific version of Vault with the `TF_VAR_vault_version` environment variable like this:. 
+Vault Docker Lab tries to keep current and offer the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:. 
 
 ```shell
 TF_VAR_vault_version=1.11.0 make
@@ -229,7 +233,7 @@ Export the `TF_VAR_vault_edition` environment variable to specify `vault-enterpr
 export TF_VAR_vault_edition=vault-enterprise
 ```
 
-Make Vault Docker Lab
+Make Vault Docker Lab.
 
 ```shell
 make

@@ -31,7 +31,7 @@ resource "docker_network" "vault_docker_lab_network" {
 # -----------------------------------------------------------------------
 
 resource "docker_image" "vault" {
-  name         = "hashicorp/${var.vault_edition}:latest"
+  name         = "hashicorp/${var.vault_edition}:${var.vault_version}"
   keep_locally = true
 }
 

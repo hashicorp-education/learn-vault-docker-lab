@@ -16,7 +16,7 @@ variable "docker_host" {
 
 # Set TF_VAR_vault_version to override this
 variable "vault_version" {
-    default = "1.14.1"
+    default = "latest"
 }
 
 # Set TF_VAR_vault_edition to override this

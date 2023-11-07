@@ -42,16 +42,16 @@ unseal_nodes:
 	@printf "$(MY_NAME_IS) Unsealing cluster nodes ..."
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8220 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
 	@VAULT_ADDR=https://127.0.0.1:8220 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
-	@printf 'vault_docker_lab_2. '
+	@printf 'node 2. '
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8230 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
 	@VAULT_ADDR=https://127.0.0.1:8230 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
-	@printf 'vault_docker_lab_3. '
+	@printf 'node 3. '
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8240 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
 	@VAULT_ADDR=https://127.0.0.1:8240 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
-	@printf 'vault_docker_lab_4. '
+	@printf 'node 4. '
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8250 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
 	@VAULT_ADDR=https://127.0.0.1:8250 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
-	@printf 'vault_docker_lab_5. '
+	@printf 'node 5. '
 	@echo 'Done.'
 
 ROOT_TOKEN=$$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}')
