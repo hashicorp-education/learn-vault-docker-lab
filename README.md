@@ -30,11 +30,13 @@ To make a Vault Docker Lab, your host computer must have the following software 
 
 - [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.5.6 darwin_arm64 on macOS version 13.5.1)
 
-> **NOTE:** Vault Docker Lab is currently known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors.
+- [Vault CLI](https://developer.hashicorp.com/vault/install) binary installed in your system PATH if you want to use CLI commands.
+
+> **NOTE:** Vault Docker Lab is known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 13.6).
 
 ## Make your own Vault Docker Lab
 
-There are just a handful of steps to make your own Vault Docker Lab.
+There are just a handful of steps to making your own Vault Docker Lab.
 
 1. Clone this repository.
 
@@ -162,7 +164,7 @@ There are just a handful of steps to make your own Vault Docker Lab.
         # No output expected
         ```
 
-1. Type `make` and press `[return]`; successful output resembles this example, and includes the initial root token value (for the sake of convenience and ease of use).
+1. Type `make` and press `[return]`; successful output resembles this example, and includes the initial root token value for the sake of convenience and ease of use.
 
    ```plaintext
    [vault-docker-lab] Initializing Terraform workspace ...Done.
@@ -175,7 +177,7 @@ There are just a handful of steps to make your own Vault Docker Lab.
    [vault-docker-lab] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
    ```
 
-1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value.
+1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value if you are using CLI. You can use the initial root token value for API requests or to login to the [web UI](https://127.0.0.1:8200).
 
 ## Notes
 
