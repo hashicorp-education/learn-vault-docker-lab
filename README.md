@@ -188,7 +188,12 @@ The following notes should help you better understand the container structure Va
 The configuration, data, and audit device log files live in a subdirectory under `containers` that is named after the server. For example, here is the structure of the first server, _vault_docker_lab_1_ as it appears when active.
 
 ```shell
-$ tree containers/vault_docker_lab_1
+tree containers/vault_docker_lab_1
+```
+
+Example output:
+
+```plaintext
 containers/vault_docker_lab_1
 ├── certs
 │   ├── server_cert.pem
