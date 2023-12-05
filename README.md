@@ -273,6 +273,23 @@ Example output:
 [vault-docker-lab] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
 ```
 
+### Benchmark example
+
+You can use [vault-benchmark]() with the example configuration included in `benchmark-example/config/vault-benchmark-config.hcl` and this command line example (make sure you login with the initial root token first).
+
+```shell
+docker run \
+    --volume="$PWD"/benchmark-example:/config \
+    --ip 10.1.42.74 \
+    --name learn-vault-benchmark \
+    --network vault_docker_lab_network \
+    --env "VAULT_TOKEN=$(cat ~/.vault-token)" \
+    --env 'VAULT_ADDR=https://10.1.42.101:8200' \
+    --env 'VAULT_SKIP_VERIFY=true' \
+    --rm \
+    hashicorp/vault-benchmark vault-benchmark run -config=/config/vault-benchmark-config.hcl
+```
+
 ### Docker resource usage
 
 The screenshot shows a Vault Docker Lab that has been up but idle for 25 minutes.
