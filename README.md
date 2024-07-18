@@ -1,30 +1,18 @@
 # Vault Docker Lab
 
-```plaintext
- _   __          ____    ___           __             __        __ 
-| | / /__ ___ __/ / /_  / _ \___  ____/ /_____ ____  / /  ___ _/ / 
-| |/ / _ `/ // / / __/ / // / _ \/ __/  '_/ -_) __/ / /__/ _ `/ _ \
-|___/\_,_/\_,_/_/\__/ /____/\___/\__/_/\_\\__/_/   /____/\_,_/_.__/
-                                                                   
-Vault Docker Lab is a minimal Vault cluster Terraformed onto Docker containers.
-It is useful for development and testing, but not for production.
-```
-
-## What?
-
 Vault Docker Lab is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault Docker image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). It is powered by a `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs).
 
 ## Why?
 
-To quickly establish a local Vault cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, and testing.
+You can use Vault Docker Lab to build a small containerized cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, or testing. You should not use Vault Docker Lab for production use cases.
 
 ## How?
 
-You can make your own Vault Docker Lab with Docker, Terraform, and the Terraform Docker provider.
+You can run your own Vault Docker Lab with Docker, Terraform, and the Terraform Docker provider.
 
 ## Prerequisites
 
-To make a Vault Docker Lab, your host computer must have the following software installed:
+To run a Vault Docker Lab, your host computer must have the following software installed:
 
 - [Docker](https://www.docker.com/products/docker-desktop/) (tested with Docker Desktop version 4.22.1 on macOS version 13.5.1)
 
@@ -32,11 +20,11 @@ To make a Vault Docker Lab, your host computer must have the following software 
 
 - [Vault CLI](https://developer.hashicorp.com/vault/install) binary installed in your system PATH if you want to use CLI commands
 
-> **NOTE:** Vault Docker Lab is known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 13.6).
+> **NOTE:** Vault Docker Lab is known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 13.6.7).
 
-## Make your own Vault Docker Lab
+## Run your own Vault Docker Lab
 
-There are just a handful of steps to making your own Vault Docker Lab.
+Follow these steps to run your own Vault Docker Lab.
 
 1. Clone this repository.
 
@@ -167,14 +155,14 @@ There are just a handful of steps to making your own Vault Docker Lab.
 1. Type `make` and press `[return]`; successful output resembles this example, and includes the initial root token value for the sake of convenience and ease of use.
 
    ```plaintext
-   [vault-docker-lab] Initializing Terraform workspace ...Done.
-   [vault-docker-lab] Applying Terraform configuration ...Done.
-   [vault-docker-lab] Checking Vault active node status ...Done.
-   [vault-docker-lab] Checking Vault initialization status ...Done.
-   [vault-docker-lab] Unsealing cluster nodes .....vault_docker_lab_2. vault_docker_lab_3. vault_docker_lab_4. vault_docker_lab_5. Done.
-   [vault-docker-lab] Enable audit device ...Done.
-   [vault-docker-lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-   [vault-docker-lab] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
+   [Vault Docker Lab] Initializing Terraform workspace ...Done.
+   [Vault Docker Lab] Applying Terraform configuration ...Done.
+   [Vault Docker Lab] Checking Vault active node status ...Done.
+   [Vault Docker Lab] Checking Vault initialization status ...Done.
+   [Vault Docker Lab] Unsealing cluster nodes .....vault_docker_lab_2. vault_docker_lab_3. vault_docker_lab_4. vault_docker_lab_5. Done.
+   [Vault Docker Lab] Enable audit device ...Done.
+   [Vault Docker Lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+   [Vault Docker Lab] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
    ```
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value if you are using CLI. You can use the initial root token value for API requests or to login to the [web UI](https://127.0.0.1:8200).
@@ -212,9 +200,11 @@ containers/vault_docker_lab_1
 7 directories, 7 files
 ```
 
-### Run a specific Vault version
+> **Note**: If you need access to the unseal key, you can find it along with the initial root token value in the `.vault_docker_lab_1_init` file.
 
-Vault Docker Lab tries to keep current and offer the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:. 
+### Run a certain Vault version
+
+Vault Docker Lab tries to keep current and offer the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:.
 
 ```shell
 TF_VAR_vault_version=1.11.0 make
@@ -256,7 +246,7 @@ TF_VAR_vault_log_level=Debug make
 
 ### Stage a cluster
 
-By default, vault-docker-lab automatically initializes and unseals Vault. If you'd rather perform these steps yourself, you can specify that they're skipped.
+By default, Vault Docker Lab automatically initializes and unseals Vault. If you'd rather perform these steps yourself, you can specify that they're skipped.
 
 Stage a cluster.
 
@@ -267,10 +257,10 @@ make stage
 Example output:
 
 ```plaintext
-[vault-docker-lab] Initializing Terraform workspace ...Done.
-[vault-docker-lab] Applying Terraform configuration ...Done.
-[vault-docker-lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-[vault-docker-lab] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
+[Vault Docker Lab] Initializing Terraform workspace ...Done.
+[Vault Docker Lab] Applying Terraform configuration ...Done.
+[Vault Docker Lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+[Vault Docker Lab] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
 ```
 
 ### Benchmark example
@@ -307,8 +297,8 @@ make clean
 Example output:
 
 ```plaintext
-[vault-docker-lab] Destroying Terraform configuration ...Done.
-[vault-docker-lab] Removing artifacts created by Vault Docker Lab ...Done.
+[Vault Docker Lab] Destroying Terraform configuration ...Done.
+[Vault Docker Lab] Removing artifacts created by Vault Docker Lab ...Done.
 ```
 
 To clean up **everything** including Terraform runtime configuration and state:
@@ -320,9 +310,9 @@ make cleanest
 Example output:
 
 ```plaintext
-[vault-docker-lab] Destroying Terraform configuration ...Done.
-[vault-docker-lab] Removing artifacts created by Vault Docker Lab ...Done.
-[vault-docker-lab] Removing all Terraform runtime configuration and state ...Done.
+[Vault Docker Lab] Destroying Terraform configuration ...Done.
+[Vault Docker Lab] Removing artifacts created by Vault Docker Lab ...Done.
+[Vault Docker Lab] Removing all Terraform runtime configuration and state ...Done.
 ```
 
 To remove the CA certificate from your OS trust store:

@@ -1,4 +1,4 @@
-MY_NAME_IS := [vault-docker-lab]
+MY_NAME_IS := [Vault Docker Lab]
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 UNAME := $$(uname)
 VAULT_DOCKER_LAB_AUDIT_LOGS = ./containers/vault_docker_lab_?/logs/*
