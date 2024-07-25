@@ -14,13 +14,13 @@ You can run your own Vault Docker Lab with Docker, Terraform, and the Terraform 
 
 To run a Vault Docker Lab, your host computer must have the following software installed:
 
-- [Docker](https://www.docker.com/products/docker-desktop/) (tested with Docker Desktop version 4.22.1 on macOS version 13.5.1)
+- [Docker](https://www.docker.com/products/docker-desktop/) (tested with Docker Desktop version 4.32.0 on macOS version 14.5)
 
-- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.5.6 darwin_arm64 on macOS version 13.5.1)
+- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.9.3 darwin_arm64 on macOS version 14.5)
 
 - [Vault CLI](https://developer.hashicorp.com/vault/install) binary installed in your system PATH if you want to use CLI commands
 
-> **NOTE:** Vault Docker Lab is known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 13.6.7).
+> **NOTE:** Vault Docker Lab is known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 14.5).
 
 ## Run your own Vault Docker Lab
 

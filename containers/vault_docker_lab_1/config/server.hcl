@@ -15,3 +15,8 @@ storage "raft" {
   path    = "/vault/data"
   node_id = "vault-docker-lab-1"
 }
+
+telemetry {
+  prometheus_retention_time = "30s"
+  disable_hostname = true
+}
