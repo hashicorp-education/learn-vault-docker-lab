@@ -1,0 +1,27 @@
+# config file version
+apiVersion: 1
+
+datasources:
+  - name: vault
+    type: prometheus
+    access: server
+    orgId: 1
+    url: http://10.1.42.201:9090
+    password:
+    user:
+    database:
+    basicAuth:
+    basicAuthUser:
+    basicAuthPassword:
+    withCredentials:
+    isDefault:
+    jsonData:
+      graphiteVersion: "1.1"
+      tlsAuth: false
+      tlsAuthWithCACert: false
+    secureJsonData:
+      tlsCACert: ""
+      tlsClientCert: ""
+      tlsClientKey: ""
+    version: 1
+    editable: true

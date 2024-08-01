@@ -1,8 +1,3 @@
-#  _   __          ____    ___           __             __        __ 
-# | | / /__ ___ __/ / /_  / _ \___  ____/ /_____ ____  / /  ___ _/ / 
-# | |/ / _ `/ // / / __/ / // / _ \/ __/  '_/ -_) __/ / /__/ _ `/ _ \
-# |___/\_,_/\_,_/_/\__/ /____/\___/\__/_/\_\\__/_/   /____/\_,_/_.__/
-#                                                                    
 # Vault Docker Lab is a minimal Vault cluster Terraformed on Docker
 # It is useful for development and testing, but not for production.
 
@@ -13,6 +8,7 @@
 provider "docker" {
   host = var.docker_host
 }
+
 # -----------------------------------------------------------------------
 # Docker network
 # -----------------------------------------------------------------------
@@ -114,7 +110,7 @@ resource "null_resource" "active_node_init" {
   provisioner "local-exec" {
     command = "while ! curl --insecure --fail --silent https://127.0.0.1:8200/v1/sys/seal-status --output /dev/null ; do printf '.' ; sleep 4 ; done ; vault operator init -key-shares=1 -key-threshold=1 > ${path.cwd}/.vault_docker_lab_1_init"
     environment = {
-      VAULT_ADDR = "https://127.0.0.1:8200"
+      VAULT_ADDR   = "https://127.0.0.1:8200"
       VAULT_CACERT = "${path.cwd}/containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem"
     }
   }
@@ -129,7 +125,7 @@ resource "null_resource" "active_node_unseal" {
   provisioner "local-exec" {
     command = "while [ ! -f ${path.cwd}/.vault_docker_lab_1_init ] ; do printf '.' ; sleep 1 ; done &&export UNSEAL_KEY=$(grep 'Unseal Key 1' ${path.cwd}/.vault_docker_lab_1_init | awk '{print $NF}') && vault operator unseal $UNSEAL_KEY"
     environment = {
-      VAULT_ADDR = "https://127.0.0.1:8200"
+      VAULT_ADDR   = "https://127.0.0.1:8200"
       VAULT_CACERT = "${path.cwd}/containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem"
     }
   }

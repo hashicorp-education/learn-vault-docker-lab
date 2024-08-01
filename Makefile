@@ -18,7 +18,7 @@ done:
 
 done-stage:
 	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"
-	@echo "$(MY_NAME_IS) Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use."
+	@echo "$(MY_NAME_IS) Vault is not initialized or unsealed. You must initialize and unseal Vault before use."
 
 DOCKER_OK=$$(docker info > /dev/null 2>&1; printf $$?)
 TERRAFORM_BINARY_OK=$$(which terraform > /dev/null 2>&1 ; printf $$?)
