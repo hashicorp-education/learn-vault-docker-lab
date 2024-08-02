@@ -33,7 +33,6 @@ cleanest: clean
 	@rm -f terraform.tfstate.backup
 	@rm -rf .terraform
 	@rm -f .terraform.lock.hcl
-	@rm -f prometheus_container.log
 	@echo 'Done.'
 
 .PHONY: all

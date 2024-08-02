@@ -4,11 +4,11 @@
 .terraform
 .terraform.lock.hcl
 .vault_docker_lab_1_init
+*.log
 devenv.lock
 terraform.tfstate
 terraform.tfstate.backup
 containers/vault_docker_lab_?/data/*
 containers/vault_docker_lab_?/logs/*
-vault_docker_lab.log
 grafana/prometheus-token
 prometheus/prometheus-token
