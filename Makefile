@@ -1,4 +1,5 @@
-MY_NAME_IS := [Vault Docker Lab]
+MY_NAME_IS := [VDL: Vault cluster]
+HERE := $$(pwd)
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 UNAME := $$(uname)
 VAULT_DOCKER_LAB_AUDIT_LOGS = ./containers/vault_docker_lab_?/logs/*
@@ -11,6 +12,14 @@ default: all
 all: prerequisites provision vault_status unseal_nodes audit_device done
 
 stage: prerequisites provision done-stage
+
+telemetry-stack:
+	@echo "$(MY_NAME_IS) Grafana and Prometheus telemetry"
+	@cd prometheus && make
+	@cd grafana && make
+
+load-test:
+	@echo "$(MY_NAME_IS) Vault Benchmark load test"
 
 done:
 	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"

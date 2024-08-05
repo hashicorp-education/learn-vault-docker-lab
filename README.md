@@ -1,30 +1,34 @@
 # Vault Docker Lab
 
-Vault Docker Lab is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault Docker image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). It is powered by a `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs).
+Vault Docker Lab (VDL) is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault container image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). VDL uses a `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs) to build the cluster.
 
 ## Why?
 
-You can use Vault Docker Lab to build a small containerized cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, or testing. You should not use Vault Docker Lab for production use cases.
+You can use VDL to build a small containerized cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, or testing. **You should not use VDL for production use cases**.
 
 ## How?
 
-You can run your own Vault Docker Lab with Docker, Terraform, and the Terraform Docker provider.
+You can run your own VDL with Docker, Terraform, and the Terraform Docker provider.
 
 ## Prerequisites
 
-To run a Vault Docker Lab, your host computer must have the following software installed:
+Your host computer must have the following software installed to run VDL:
+
+### Required
 
 - [Docker](https://www.docker.com/products/docker-desktop/) (tested with Docker Desktop version 4.32.0 on macOS version 14.5)
 
 - [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.9.3 darwin_arm64 on macOS version 14.5)
 
+### Optional
+
 - [Vault CLI](https://developer.hashicorp.com/vault/install) binary installed in your system PATH if you want to use CLI commands
 
-> **NOTE:** Vault Docker Lab is known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 14.5).
+> **NOTE:** VDL functions on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 14.5).
 
-## Run your own Vault Docker Lab
+## Run your own VDL
 
-Follow these steps to run your own Vault Docker Lab.
+Follow these steps to run your own VDL.
 
 1. Clone this repository.
 
@@ -38,7 +42,7 @@ Follow these steps to run your own Vault Docker Lab.
    cd learn-vault-docker-lab
    ```
 
-1. Add the Vault Docker Lab Certificate Authority certificate to your operating system trust store.
+1. Add the VDL Certificate Authority certificate to your operating system trust store.
 
    - For macOS:
 
@@ -48,7 +52,7 @@ Follow these steps to run your own Vault Docker Lab.
         ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem
      ```
 
-     > **NOTE**: You will be prompted for your user password and sometimes could be prompted twice; enter your user password as needed to add the certificate.
+     > **NOTE**: The OS prompts for your user password, and sometimes prompts twice; enter your user password as needed to add the certificate.
 
    - For Linux:
 
@@ -66,7 +70,7 @@ Follow these steps to run your own Vault Docker Lab.
         OK: 9 MiB in 19 packages
         ```
 
-        From within this repository directory, copy the Vault Docker Lab CA certificate to the `/usr/local/share/ca-certificates` directory.
+        From within this repository directory, copy the VDL CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
         sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
@@ -102,7 +106,7 @@ Follow these steps to run your own Vault Docker Lab.
          done.
         ```
 
-       Copy the Vault Docker Lab CA certificate to `/usr/local/share/ca-certificates`.
+       Copy the VDL CA certificate to `/usr/local/share/ca-certificates`.
 
        ```shell
        sudo cp containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
@@ -122,7 +126,7 @@ Follow these steps to run your own Vault Docker Lab.
 
      - **RHEL**
 
-       From within this repository directory, copy the Vault Docker Lab CA certificate to the `/etc/pki/ca-trust/source/anchors` directory.
+       From within this repository directory, copy the VDL CA certificate to the `/etc/pki/ca-trust/source/anchors` directory.
 
         ```shell
         sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
@@ -137,7 +141,7 @@ Follow these steps to run your own Vault Docker Lab.
         # No output expected
         ```
 
-       From within this repository directory, copy the Vault Docker Lab CA certificate to the `/usr/local/share/ca-certificates` directory.
+       From within this repository directory, copy the VDL CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
         sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
@@ -152,28 +156,28 @@ Follow these steps to run your own Vault Docker Lab.
         # No output expected
         ```
 
-1. Type `make` and press `[return]`; successful output resembles this example, and includes the initial root token value for the sake of convenience and ease of use.
+1. Type `make` and press `[return]`; output resembles this example, and includes the initial root token value for the sake of convenience and ease of use.
 
    ```plaintext
-   [Vault Docker Lab] Initializing Terraform workspace ...Done.
-   [Vault Docker Lab] Applying Terraform configuration ...Done.
-   [Vault Docker Lab] Checking Vault active node status ...Done.
-   [Vault Docker Lab] Checking Vault initialization status ...Done.
-   [Vault Docker Lab] Unsealing cluster nodes .....vault_docker_lab_2. vault_docker_lab_3. vault_docker_lab_4. vault_docker_lab_5. Done.
-   [Vault Docker Lab] Enable audit device ...Done.
-   [Vault Docker Lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-   [Vault Docker Lab] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
+   [VDL: Vault cluster] Initializing Terraform workspace ...Done.
+   [VDL: Vault cluster] Applying Terraform configuration ...Done.
+   [VDL: Vault cluster] Checking Vault active node status ...Done.
+   [VDL: Vault cluster] Checking Vault initialization status ...Done.
+   [VDL: Vault cluster] Unsealing cluster nodes .....vault_docker_lab_2. vault_docker_lab_3. vault_docker_lab_4. vault_docker_lab_5. Done.
+   [VDL: Vault cluster] Enable audit device ...Done.
+   [VDL: Vault cluster] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+   [VDL: Vault cluster] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
    ```
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value if you are using CLI. You can use the initial root token value for API requests or to login to the [web UI](https://127.0.0.1:8200).
 
 ## Notes
 
-The following notes should help you better understand the container structure Vault Docker Lab uses, along with tips on commonly used features.
+The following notes describe the VDL container structure, and give tips on commonly used features.
 
 ### Configuration, data & logs
 
-The configuration, data, and audit device log files live in a subdirectory under `containers` that is named after the server. For example, here is the structure of the first server, _vault_docker_lab_1_ as it appears when active.
+The configuration, data, and audit device log files live in a subdirectory  named after the server under `containers`. For example, here is the structure of the first server, _vault_docker_lab_1_ as it appears when active.
 
 ```shell
 tree containers/vault_docker_lab_1
@@ -204,17 +208,17 @@ containers/vault_docker_lab_1
 
 ### Run a certain Vault version
 
-Vault Docker Lab tries to keep current and offer the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:.
+VDL offers the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:
 
 ```shell
 TF_VAR_vault_version=1.11.0 make
 ```
 
-> **Tip**: Vault versions >= 1.11.0 are recommended for ideal Integrated Storage support.
+> **Tip**: You should use Vault versions >= 1.11.0 for ideal Integrated Storage support.
 
 ### Run Vault Enterprise
 
-Vault Docker Lab runs the Vault community edition by default, but you can also run the Enterprise edition.
+VDL runs the Vault community edition by default, but you can also run the Enterprise edition.
 
 > **NOTE**: You must have an [Enterprise license](https://www.hashicorp.com/products/vault/pricing) to run the Vault Enterprise image.
 
@@ -230,7 +234,7 @@ Export the `TF_VAR_vault_edition` environment variable to specify `vault-enterpr
 export TF_VAR_vault_edition=vault-enterprise
 ```
 
-Make Vault Docker Lab.
+Make VDL.
 
 ```shell
 make
@@ -246,7 +250,7 @@ TF_VAR_vault_log_level=Debug make
 
 ### Stage a cluster
 
-By default, Vault Docker Lab automatically initializes and unseals Vault. If you'd rather perform these steps yourself, you can specify that they're skipped.
+By default, VDL automatically initializes and unseals Vault. If you'd rather perform these steps yourself, you can specify that they're skipped.
 
 Stage a cluster.
 
@@ -257,10 +261,10 @@ make stage
 Example output:
 
 ```plaintext
-[Vault Docker Lab] Initializing Terraform workspace ...Done.
-[Vault Docker Lab] Applying Terraform configuration ...Done.
-[Vault Docker Lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-[Vault Docker Lab] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
+[VDL] Initializing Terraform workspace ...Done.
+[VDL] Applying Terraform configuration ...Done.
+[VDL] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+[VDL] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
 ```
 
 ### Benchmark example
@@ -282,7 +286,7 @@ docker run \
 
 ### Docker resource usage
 
-The screenshot shows a Vault Docker Lab that has been up but idle for 25 minutes.
+The screenshot shows a VDL that has been up but idle for 25 minutes.
 
 <img width="732" alt="2023-09-01_14-04-54" src="https://github.com/hashicorp-education/learn-vault-docker-lab/assets/77563/5ff76eed-7c70-4bdd-bca2-3a478d878b10">
 
@@ -297,8 +301,8 @@ make clean
 Example output:
 
 ```plaintext
-[Vault Docker Lab] Destroying Terraform configuration ...Done.
-[Vault Docker Lab] Removing artifacts created by Vault Docker Lab ...Done.
+[VDL] Destroying Terraform configuration ...Done.
+[VDL] Removing artifacts created by VDL ...Done.
 ```
 
 To clean up **everything** including Terraform runtime configuration and state:
@@ -310,9 +314,9 @@ make cleanest
 Example output:
 
 ```plaintext
-[Vault Docker Lab] Destroying Terraform configuration ...Done.
-[Vault Docker Lab] Removing artifacts created by Vault Docker Lab ...Done.
-[Vault Docker Lab] Removing all Terraform runtime configuration and state ...Done.
+[VDL] Destroying Terraform configuration ...Done.
+[VDL] Removing artifacts created by VDL ...Done.
+[VDL] Removing all Terraform runtime configuration and state ...Done.
 ```
 
 To remove the CA certificate from your OS trust store:
@@ -324,7 +328,7 @@ To remove the CA certificate from your OS trust store:
   # no output expected
   ```
 
-  - You will be prompted for your user password; enter it to add the certificate.
+  - The OS prompts you for your user password; enter it to add the certificate.
 
 - For Linux:
 
@@ -346,6 +350,6 @@ If you are new to Vault, check out the **Get Started** tutorial series:
 - [HCP Vault Quick Start](https://developer.hashicorp.com/vault/tutorials/cloud)
 - [UI Quick Start](https://developer.hashicorp.com/vault/tutorials/getting-started-ui)
 
-The tutorial library also has a wide range of intermediate and advanced tutorials with integrated hands on labs.
+The tutorial library also has a wide range of intermediate and advanced tutorials with integrated labs.
 
 The [API documentation](https://developer.hashicorp.com/vault/api-docs) and [product documentation](https://developer.hashicorp.com/vault/docs) are also great learning resources.
