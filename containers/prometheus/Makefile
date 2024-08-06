@@ -12,10 +12,12 @@ all: provision
 stage: provision
 
 provision:
-ifneq ("$(wildcard $(../.vault_docker_lab_1_init))","")
-	@echo "$(MY_NAME_IS) No Vault initialization file found. You must run make in the top-level VDL project to generate an initial root token value before deploying the telemetry stack."
-	@exit 1
-endif
+	ifeq ($(shell test -e $(../../.vault_docker_lab_1_init) && echo -n yes),yes)
+		ROOT_TOKEN=$$(grep 'Initial Root Token' ../../.vault_docker_lab_1_init | awk '{print $$NF}')
+	else
+		@echo "No Vault initialization file found. You must run make in the top-level VDL project to generate an initial root token value before deploying Prometheus."
+		exit 1
+	endif
 	@printf $(ROOT_TOKEN) > ./prometheus-token
 	@printf "$(MY_NAME_IS) Initializing Terraform workspace ..."
 	@terraform init > $(PROMETHEUS_CONTAINER_LOG_FILE)
