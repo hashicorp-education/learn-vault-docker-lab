@@ -1,7 +1,8 @@
-MY_NAME_IS := [VDL: Grafana]
+MY_NAME_IS := Grafana
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 UNAME := $$(uname)
-ROOT_TOKEN=$$(grep 'Initial Root Token' ../.vault_docker_lab_1_init | awk '{print $$NF}')
+VDL_INIT = ../../.vdl_node_1_init
+ROOT_TOKEN=$$(grep 'Initial Root Token' $(VDL_INIT) | awk '{print $$NF}')
 GRAFANA_CONTAINER_LOG_FILE = ./grafana_docker_lab.log
 
 default: all

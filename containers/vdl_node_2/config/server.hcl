@@ -13,7 +13,7 @@ listener "tcp" {
 
 storage "raft" {
   path    = "/vault/data"
-  node_id = "vault-docker-lab-2"
+  node_id = "vdl_node_2"
 
   retry_join {
     leader_tls_servername   = "vault-docker-lab1.vault-docker-lab.lan"

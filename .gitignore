@@ -3,12 +3,12 @@
 .devenv.flake.nix
 .terraform
 .terraform.lock.hcl
-.vault_docker_lab_1_init
+.vdl_node_1_init
 *.log
 devenv.lock
 terraform.tfstate
 terraform.tfstate.backup
-containers/vault_docker_lab_?/data/*
-containers/vault_docker_lab_?/logs/*
+containers/vdl_node_?/data/*
+containers/vdl_node_?/logs/*
 grafana/prometheus-token
 prometheus/prometheus-token

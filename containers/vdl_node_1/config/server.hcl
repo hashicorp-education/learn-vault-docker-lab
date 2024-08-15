@@ -13,7 +13,7 @@ listener "tcp" {
 
 storage "raft" {
   path    = "/vault/data"
-  node_id = "vault-docker-lab-1"
+  node_id = "vdl_node_1"
 }
 
 telemetry {

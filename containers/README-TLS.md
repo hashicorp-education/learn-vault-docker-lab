@@ -1,6 +1,6 @@
 # Self-Signed TLS Details
 
-The TLS certificates and keys used by Vault Docker Lab are self-signed and were generated with the Vault PKI secrets engine based on the guidance in the [Build Your Own Certificate Authority (CA)](https://developer.hashicorp.com/vault/tutorials/secrets-management/pki-engine) tutorial.
+TLS certificates and keys used by Vault Docker Lab are self-signed and generated with the Vault PKI secrets engine based on guidance from [Build Your Own Certificate Authority (CA)](https://developer.hashicorp.com/vault/tutorials/secrets-management/pki-engine).
 
 Here are the exact commands used to generate the current set.
 
@@ -78,7 +78,7 @@ vault write pki_int/roles/vault-docker-lab-dot-lan \
      ttl="17520"
 ```
 
-## Certificates and Keys
+## Certificates and keys
 
 ```shell
 vault write pki_int/issue/vault-docker-lab-dot-lan \

@@ -1,9 +1,11 @@
-MY_NAME_IS := [VDL: Prometheus]
+MY_NAME_IS := Prometheus
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 UNAME := $$(uname)
 PROMETHEUS_ACL = ./prometheus_acl.hcl
 PROMETHEUS_CONFIG = ./prometheus.yml
 PROMETHEUS_CONTAINER_LOG_FILE = ./prometheus_container.log
+VDL_INIT = ../../.vdl_node_1_init
+ROOT_TOKEN=$$(grep 'Initial Root Token' $(VDL_INIT) | awk '{print $$NF}')
 
 default: all
 
@@ -12,12 +14,6 @@ all: provision
 stage: provision
 
 provision:
-	ifeq ($(shell test -e $(../../.vault_docker_lab_1_init) && echo -n yes),yes)
-		ROOT_TOKEN=$$(grep 'Initial Root Token' ../../.vault_docker_lab_1_init | awk '{print $$NF}')
-	else
-		@echo "No Vault initialization file found. You must run make in the top-level VDL project to generate an initial root token value before deploying Prometheus."
-		exit 1
-	endif
 	@printf $(ROOT_TOKEN) > ./prometheus-token
 	@printf "$(MY_NAME_IS) Initializing Terraform workspace ..."
 	@terraform init > $(PROMETHEUS_CONTAINER_LOG_FILE)

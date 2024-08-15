@@ -49,7 +49,7 @@ Follow these steps to run your own VDL.
      ```shell
      sudo security add-trusted-cert -d -r trustAsRoot \
         -k /Library/Keychains/System.keychain \
-        ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem
+        ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem
      ```
 
      > **NOTE**: The OS prompts for your user password, and sometimes prompts twice; enter your user password as needed to add the certificate.
@@ -73,7 +73,7 @@ Follow these steps to run your own VDL.
         From within this repository directory, copy the VDL CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
-        sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
+        sudo cp ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
             /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
         # No output expected
         ```
@@ -109,7 +109,7 @@ Follow these steps to run your own VDL.
        Copy the VDL CA certificate to `/usr/local/share/ca-certificates`.
 
        ```shell
-       sudo cp containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
+       sudo cp containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
            /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
        # No output expected
        ```
@@ -129,7 +129,7 @@ Follow these steps to run your own VDL.
        From within this repository directory, copy the VDL CA certificate to the `/etc/pki/ca-trust/source/anchors` directory.
 
         ```shell
-        sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
+        sudo cp ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
             /etc/pki/ca-trust/source/anchors/vault_docker_lab_ca.crt
         # No output expected
         ```
@@ -144,7 +144,7 @@ Follow these steps to run your own VDL.
        From within this repository directory, copy the VDL CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
-        sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
+        sudo cp ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
             /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
         # No output expected
         ```
@@ -159,14 +159,14 @@ Follow these steps to run your own VDL.
 1. Type `make` and press `[return]`; output resembles this example, and includes the initial root token value for the sake of convenience and ease of use.
 
    ```plaintext
-   [VDL: Vault cluster] Initializing Terraform workspace ...Done.
-   [VDL: Vault cluster] Applying Terraform configuration ...Done.
-   [VDL: Vault cluster] Checking Vault active node status ...Done.
-   [VDL: Vault cluster] Checking Vault initialization status ...Done.
-   [VDL: Vault cluster] Unsealing cluster nodes .....vault_docker_lab_2. vault_docker_lab_3. vault_docker_lab_4. vault_docker_lab_5. Done.
-   [VDL: Vault cluster] Enable audit device ...Done.
-   [VDL: Vault cluster] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-   [VDL: Vault cluster] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
+   VDL initializing Terraform workspace ...done.
+   VDL applying Terraform configuration ...done.
+   VDL check Vault active node status ...done.
+   VDL check Vault initialization status ...done.
+   VDL unsealing cluster nodes .....node 2. node 3. node 4. node 5. done.
+   VDL enable audit device ...done.
+   VDL export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+   VDL login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
    ```
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value if you are using CLI. You can use the initial root token value for API requests or to login to the [web UI](https://127.0.0.1:8200).
@@ -177,16 +177,16 @@ The following notes describe the VDL container structure, and give tips on commo
 
 ### Configuration, data & logs
 
-The configuration, data, and audit device log files live in a subdirectory  named after the server under `containers`. For example, here is the structure of the first server, _vault_docker_lab_1_ as it appears when active.
+The configuration, data, and audit device log files live in a subdirectory  named after the server under `containers`. For example, here is the structure of the first server, _vdl_node_1_ as it appears when active.
 
 ```shell
-tree containers/vault_docker_lab_1
+tree containers/vdl_node_1
 ```
 
 Example output:
 
 ```plaintext
-containers/vault_docker_lab_1
+containers/vdl_node_1
 ├── certs
 │   ├── server_cert.pem
 │   ├── server_key.pem
@@ -204,7 +204,7 @@ containers/vault_docker_lab_1
 7 directories, 7 files
 ```
 
-> **Note**: If you need access to the unseal key, you can find it along with the initial root token value in the `.vault_docker_lab_1_init` file.
+> **Note**: If you need access to the unseal key, you can find it along with the initial root token value in the `.vdl_node_1_init` file.
 
 ### Run a certain Vault version
 
