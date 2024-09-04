@@ -5,6 +5,8 @@
 # Set TF_VAR_docker_host to override this
 # tcp with hostname example:
 # export TF_VAR_docker_host="tcp://docker:2345"
+# or for Docker Desktop on Mac
+# export TF_VAR_docker_host="unix://$HOME/.docker/run/docker.sock"
 
 variable "docker_host" {
     default = "unix:///var/run/docker.sock"

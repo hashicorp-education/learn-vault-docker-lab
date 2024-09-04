@@ -159,14 +159,16 @@ Follow these steps to run your own VDL.
 1. Type `make` and press `[return]`; output resembles this example, and includes the initial root token value for the sake of convenience and ease of use.
 
    ```plaintext
-   VDL initializing Terraform workspace ...done.
-   VDL applying Terraform configuration ...done.
-   VDL check Vault active node status ...done.
-   VDL check Vault initialization status ...done.
-   VDL unsealing cluster nodes .....node 2. node 3. node 4. node 5. done.
-   VDL enable audit device ...done.
-   VDL export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-   VDL login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
+   Hello from Vault Docker Lab.
+   Initializing Terraform workspace ...done.
+   Applying Terraform configuration ...done.
+   Check Vault active node status ...done.
+   Check Vault initialization status ...done.
+   Unsealing cluster nodes .....node 2. node 3. node 4. node 5. done.
+   Enable audit device on vdl_node_1 in /vault/logs/vault_audit.log done.
+
+   Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+   Login to Vault with initial root token: vault login hvs.uyCOOjU...c0ff33...UaLSP
    ```
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value if you are using CLI. You can use the initial root token value for API requests or to login to the [web UI](https://127.0.0.1:8200).

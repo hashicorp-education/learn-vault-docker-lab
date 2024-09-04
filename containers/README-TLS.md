@@ -17,12 +17,12 @@ vault secrets tune -max-lease-ttl=87600h pki
 ```shell
 vault write -field=certificate pki/root/generate/internal \
      common_name="vault-docker-lab.lan" \
-     issuer_name="root-2023" \
-     ttl=87600h > root_2023_ca.crt
+     issuer_name="root-2024" \
+     ttl=87600h > root_2024_ca.crt
 ```
 
 ```shell
-vault write pki/roles/2023-servers allow_any_name=true
+vault write pki/roles/2024-servers allow_any_name=true
 ```
 
 ```shell
@@ -50,12 +50,18 @@ Keys
 89f920f3-9139-b45d-1b22-4e51382d600e
 ```
 
+export issuer value as `MY_ISSUER`.
+
+```shell
+export MY_ISSUER=
+```
+
 Use issuer ID in PKI issue command:
 
 ```shell
 vault pki issue \
     --issuer_name=vault-docker-lab-intermediate \
-    /pki/issuer/89f920f3-9139-b45d-1b22-4e51382d600e \
+    /pki/issuer/"${MY_ISSUER}" \
     /pki_int/ \
     common_name="vault-docker-lab.lan Intermediate Authority" \
     o="vault-docker-lab" \
@@ -117,5 +123,21 @@ vault write pki_int/issue/vault-docker-lab-dot-lan \
     alt_names="localhost" \
     common_name="vault-docker-lab5.vault-docker-lab.lan" \
     ip_sans="127.0.0.1,10.1.42.105" \
+    ttl="8760h"
+```
+
+```shell
+vault write pki_int/issue/vault-docker-lab-dot-lan \
+    alt_names="localhost" \
+    common_name="grafana.vault-docker-lab.lan" \
+    ip_sans="127.0.0.1,10.1.42.202" \
+    ttl="8760h"
+```
+
+```shell
+vault write pki_int/issue/vault-docker-lab-dot-lan \
+    alt_names="localhost" \
+    common_name="prometheus.vault-docker-lab.lan" \
+    ip_sans="127.0.0.1,10.1.42.201" \
     ttl="8760h"
 ```
