@@ -9,4 +9,8 @@ scrape_configs:
     static_configs:
       - targets: ["10.1.42.101:8200"]
     tls_config:
+      ca_file: /etc/prometheus/certs/vault_docker_lab_ca.pem
+      cert_file: /etc/prometheus/certs/server_cert.pem
+      key_file: /etc/prometheus/certs/server_key.pem
+      server_name: prometheus
       insecure_skip_verify: true

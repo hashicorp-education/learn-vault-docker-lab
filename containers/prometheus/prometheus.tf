@@ -43,6 +43,11 @@ resource "docker_container" "vault-docker-lab-prometheus" {
   }
 
   volumes {
+    host_path      = "${path.cwd}/certs"
+    container_path = "/etc/prometheus/certs"
+  }
+
+  volumes {
     host_path      = "${path.cwd}/prometheus.yml"
     container_path = "/etc/prometheus/prometheus.yml"
   }

@@ -47,4 +47,14 @@ resource "docker_container" "vault-docker-lab-grafana" {
     container_path = "/etc/grafana/provisioning/datasources/prometheus_datasource.yml"
   }
 
+  volumes {
+    host_path      = "${path.cwd}/certs/server_cert.pem"
+    container_path = "/etc/grafana/grafana.crt"
+  }
+
+  volumes {
+    host_path      = "${path.cwd}/certs/server_key.pem"
+    container_path = "/etc/grafana/grafana.key"
+  }
+
 }

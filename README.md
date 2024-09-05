@@ -159,16 +159,16 @@ Follow these steps to run your own VDL.
 1. Type `make` and press `[return]`; output resembles this example, and includes the initial root token value for the sake of convenience and ease of use.
 
    ```plaintext
-   Hello from Vault Docker Lab.
-   Initializing Terraform workspace ...done.
-   Applying Terraform configuration ...done.
-   Check Vault active node status ...done.
-   Check Vault initialization status ...done.
-   Unsealing cluster nodes .....node 2. node 3. node 4. node 5. done.
-   Enable audit device on vdl_node_1 in /vault/logs/vault_audit.log done.
-
-   Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-   Login to Vault with initial root token: vault login hvs.uyCOOjU...c0ff33...UaLSP
+   👋 Hello from Vault Docker Lab
+   [+] Initializing Terraform workspace ...done.
+   [+] Applying Terraform configuration ...done.
+   [+] Check Vault active node status ...ok.
+   [+] Check Vault initialization status ...ok.
+   [+] Unsealing cluster nodes .....node 2. node 3. node 4. node 5. done.
+   [+] Enable audit device on vdl_node_1 in /vault/logs/vault_audit.log done.
+   
+   [i] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+   [i] Login to Vault with initial root token: vault login hvs.rCKq3...c0ff33...HUxxvo7
    ```
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value if you are using CLI. You can use the initial root token value for API requests or to login to the [web UI](https://127.0.0.1:8200).
@@ -303,8 +303,9 @@ make clean
 Example output:
 
 ```plaintext
-[VDL] Destroying Terraform configuration ...Done.
-[VDL] Removing artifacts created by VDL ...Done.
+👋 Hello from Vault Docker Lab
+[-] Destroying Terraform configuration ...done.
+[-] Removing created artifacts ...done.
 ```
 
 To clean up **everything** including Terraform runtime configuration and state:
@@ -316,9 +317,10 @@ make cleanest
 Example output:
 
 ```plaintext
-[VDL] Destroying Terraform configuration ...Done.
-[VDL] Removing artifacts created by VDL ...Done.
-[VDL] Removing all Terraform runtime configuration and state ...Done.
+👋 Hello from Vault Docker Lab
+[-] Destroying Terraform configuration ...done.
+[-] Removing created artifacts ...done.
+[-] Removing all Terraform runtime configuration and state ...done.
 ```
 
 To remove the CA certificate from your OS trust store:
