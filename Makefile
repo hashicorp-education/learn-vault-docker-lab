@@ -2,13 +2,15 @@ MY_NAME_IS := Vault Docker Lab
 HERE := $$(pwd)
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 UNAME := $$(uname)
+GRAFANA_CONTAINER_LOG_FILE = $(HERE)/grafana_docker_lab.log
+PROMETHEUS_CONTAINER_LOG_FILE = $(HERE)/prometheus_container.log
 VDL_AUDIT_LOG = /vault/logs/vault_audit.log
-VDL_DATA = ./containers/vdl_node_?/data/*
-VDL_INIT = ./.vdl_node_1_init
-VDL_LOG_FILE = ./vdl.log
-VDL_VAULT_LOGS = ./containers/vdl_node_?/logs/*
+VDL_DATA = $(HERE)/containers/vdl_node_?/data/*
+VDL_INIT = $(HERE)/.vdl_node_1_init
+VDL_LOG_FILE = $(HERE)/vaut_docker_lab.log
+VDL_VAULT_LOGS = $(HERE)/containers/vdl_node_?/logs/*
 
-default: all
+default: all done
 
 all: prerequisites \
 	provision \
@@ -16,17 +18,22 @@ all: prerequisites \
 	unseal_nodes \
 	audit_device \
 	prometheus_token \
-	done
+	benchmark_token
 
 stage: prerequisites provision done-stage
 
 greetings:
 	@echo "👋 Hello from $(MY_NAME_IS)"
 
-telemetry-stack:
-	@echo "[+] Grafana and Prometheus telemetry"
-	@cd prometheus && make
-	@cd grafana && make
+with-telemetry: all telemetry-prometheus telemetry-grafana done
+
+telemetry-prometheus:
+	@cd $(HERE)/containers/prometheus && printf "[+] [Prometheus] initializing Terraform workspace ..." && terraform init > $(PROMETHEUS_CONTAINER_LOG_FILE) && echo 'done.' && printf "[+] [Prometheus] Applying Terraform configuration ..." && terraform apply -auto-approve >> $(PROMETHEUS_CONTAINER_LOG_FILE) && echo 'done.' && cd $(HERE)
+	@echo "[i] [Prometheus] web interface available at http://127.0.0.1:9090"
+
+telemetry-grafana:
+	@cd $(HERE)/containers/grafana && printf "[+] [Grafana] initializing Terraform workspace ..." && terraform init > $(GRAFANA_CONTAINER_LOG_FILE) && echo 'done.' && printf "[+] [Grafana] Applying Terraform configuration ..." && terraform apply -auto-approve >> $(GRAFANA_CONTAINER_LOG_FILE) && echo 'done.' && cd $(HERE)
+	@echo "[i] [Grafana] web interface available at http://127.0.0.1:3000"
 
 load-test:
 	@echo "[+] Vault Benchmark load test"
@@ -80,7 +87,10 @@ audit_device:
 	@echo 'done.'
 
 prometheus_token:
-	@printf $(ROOT_TOKEN) > ./containers/prometheus/prometheus-token
+	@printf $(ROOT_TOKEN) > $(HERE)/containers/prometheus/prometheus-token
+
+benchmark_token:
+	@printf $(ROOT_TOKEN) > $(HERE)/containers/benchmark/benchmark-token
 
 vault_status:
 	@printf "[+] Check Vault active node status ..."
@@ -90,7 +100,9 @@ vault_status:
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8200 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
 	@echo 'ok.'
 
-clean: greetings
+clean: greetings clean-base
+
+clean-base:
 	@if [ "$(UNAME)" = "Linux" ]; then echo "[i] [Linux] setting ownership on container volume directories ..."; echo "[i] [Linux] You could be prompted for your user password by sudo."; sudo chown -R $$USER:$$USER containers; fi
 	@printf "[-] Destroying Terraform configuration ..."
 	@terraform destroy -auto-approve >> $(VDL_LOG_FILE)
@@ -100,10 +112,21 @@ clean: greetings
 	@rm -f $(VAULT_DOCKER_LAB_INIT)
 	@rm -rf $(VDL_VAULT_LOGS)
 	@rm -f $(VDL_LOG_FILE)
-	@rm -f ./containers/prometheus/prometheus-token
+	@rm -f $(GRAFANA_CONTAINER_LOG_FILE)
+	@rm -f $(PROMETHEUS_CONTAINER_LOG_FILE)
+	@rm -f $(HERE)/containers/prometheus/prometheus-token
+	@rm -f $(HERE)/containers/benchmark/benchmark-token
 	@echo 'done.'
 
-cleanest: greetings clean
+clean-grafana:
+	@cd $(HERE)/containers/grafana && printf "[-] [Grafana] Destroying Terraform configuration ..." && terraform destroy -auto-approve >> $(PROMETHEUS_CONTAINER_LOG_FILE) && echo 'done.' && printf "[-] [Grafana] Removing artifacts created by $(MY_NAME_IS) ..." && echo 'done.' && cd $(HERE)
+
+clean-prometheus:
+	@cd $(HERE)/containers/prometheus && printf "[-] [Prometheus] Destroying Terraform configuration ..." && terraform destroy -auto-approve >> $(PROMETHEUS_CONTAINER_LOG_FILE) && echo 'done.' && printf "[-] [Prometheus] Removing artifacts created by $(MY_NAME_IS) ..." && echo 'done.' && cd $(HERE)
+
+clean-with-telemetry: greetings clean-grafana clean-prometheus clean-base 
+
+cleanest: greetings clean-base
 	@printf "[-] Removing all Terraform runtime configuration and state ..."
 	@rm -f terraform.tfstate
 	@rm -f terraform.tfstate.backup

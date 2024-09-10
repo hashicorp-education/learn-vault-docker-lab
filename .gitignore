@@ -10,5 +10,5 @@ terraform.tfstate
 terraform.tfstate.backup
 containers/vdl_node_?/data/*
 containers/vdl_node_?/logs/*
-grafana/prometheus-token
-prometheus/prometheus-token
+benchmark-token
+prometheus-token

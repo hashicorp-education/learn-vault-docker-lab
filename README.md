@@ -1,18 +1,24 @@
-# Vault Docker Lab
+# Vault Docker lab
 
-Vault Docker Lab (VDL) is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault container image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). VDL uses a `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs) to build the cluster.
+Vault Docker lab is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault container image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). Vault Docker lab uses a `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs) to build the cluster.
 
 ## Why?
 
-You can use VDL to build a small containerized cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, or testing. **You should not use VDL for production use cases**.
+You can use Vault Docker lab to build a small containerized cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, or testing. **You should not use Vault Docker lab for production use cases**.
+
+Vault Docker lab also includes a telemetry stack consisting of Prometheus and Grafana containers. Run the project, access Grafana, paste in the official dashboard, and go.
+
+**One more thing**: want to get your dashboard popping? A benchmark container is also included.
+
+Check the corresponding sections here for more details.
 
 ## How?
 
-You can run your own VDL with Docker, Terraform, and the Terraform Docker provider.
+You can run your own Vault Docker lab with Docker, Terraform, and the Terraform Docker provider.
 
 ## Prerequisites
 
-Your host computer must have the following software installed to run VDL:
+Your host computer must have the following software installed to run Vault Docker lab:
 
 ### Required
 
@@ -24,11 +30,11 @@ Your host computer must have the following software installed to run VDL:
 
 - [Vault CLI](https://developer.hashicorp.com/vault/install) binary installed in your system PATH if you want to use CLI commands
 
-> **NOTE:** VDL functions on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 14.5).
+> **NOTE:** Vault Docker lab functions on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors (last tested on macOS 14.5).
 
-## Run your own VDL
+## Run your own Vault Docker lab
 
-Follow these steps to run your own VDL.
+Follow these steps to run your own Vault Docker lab.
 
 1. Clone this repository.
 
@@ -42,14 +48,14 @@ Follow these steps to run your own VDL.
    cd learn-vault-docker-lab
    ```
 
-1. Add the VDL Certificate Authority certificate to your operating system trust store.
+1. Add the Vault Docker lab Certificate Authority certificate to your operating system trust store.
 
    - For macOS:
 
      ```shell
      sudo security add-trusted-cert -d -r trustAsRoot \
         -k /Library/Keychains/System.keychain \
-        ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem
+        ./containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem
      ```
 
      > **NOTE**: The OS prompts for your user password, and sometimes prompts twice; enter your user password as needed to add the certificate.
@@ -70,10 +76,10 @@ Follow these steps to run your own VDL.
         OK: 9 MiB in 19 packages
         ```
 
-        From within this repository directory, copy the VDL CA certificate to the `/usr/local/share/ca-certificates` directory.
+        From within this repository directory, copy the Vault Docker lab CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
-        sudo cp ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
+        sudo cp ./containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem \
             /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
         # No output expected
         ```
@@ -106,10 +112,10 @@ Follow these steps to run your own VDL.
          done.
         ```
 
-       Copy the VDL CA certificate to `/usr/local/share/ca-certificates`.
+       Copy the Vault Docker lab CA certificate to `/usr/local/share/ca-certificates`.
 
        ```shell
-       sudo cp containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
+       sudo cp containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem \
            /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
        # No output expected
        ```
@@ -126,10 +132,10 @@ Follow these steps to run your own VDL.
 
      - **RHEL**
 
-       From within this repository directory, copy the VDL CA certificate to the `/etc/pki/ca-trust/source/anchors` directory.
+       From within this repository directory, copy the Vault Docker lab CA certificate to the `/etc/pki/ca-trust/source/anchors` directory.
 
         ```shell
-        sudo cp ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
+        sudo cp ./containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem \
             /etc/pki/ca-trust/source/anchors/vault_docker_lab_ca.crt
         # No output expected
         ```
@@ -141,10 +147,10 @@ Follow these steps to run your own VDL.
         # No output expected
         ```
 
-       From within this repository directory, copy the VDL CA certificate to the `/usr/local/share/ca-certificates` directory.
+       From within this repository directory, copy the Vault Docker lab CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
-        sudo cp ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
+        sudo cp ./containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem \
             /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
         # No output expected
         ```
@@ -165,7 +171,7 @@ Follow these steps to run your own VDL.
    [+] Check Vault active node status ...ok.
    [+] Check Vault initialization status ...ok.
    [+] Unsealing cluster nodes .....node 2. node 3. node 4. node 5. done.
-   [+] Enable audit device on vdl_node_1 in /vault/logs/vault_audit.log done.
+   [+] Enable audit device on Vault Docker lab_node_1 in /vault/logs/vault_audit.log done.
    
    [i] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
    [i] Login to Vault with initial root token: vault login hvs.rCKq3...c0ff33...HUxxvo7
@@ -173,22 +179,18 @@ Follow these steps to run your own VDL.
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value if you are using CLI. You can use the initial root token value for API requests or to login to the [web UI](https://127.0.0.1:8200).
 
-## Notes
+### Explore configuration, data & logs
 
-The following notes describe the VDL container structure, and give tips on commonly used features.
-
-### Configuration, data & logs
-
-The configuration, data, and audit device log files live in a subdirectory  named after the server under `containers`. For example, here is the structure of the first server, _vdl_node_1_ as it appears when active.
+The configuration, data, and audit device log files live in a subdirectory  named after the server under `containers`. For example, here is the structure of the first server, _Vault Docker lab_node_1_ as it appears when active.
 
 ```shell
-tree containers/vdl_node_1
+tree containers/Vault Docker lab_node_1
 ```
 
 Example output:
 
 ```plaintext
-containers/vdl_node_1
+containers/Vault Docker lab_node_1
 ├── certs
 │   ├── server_cert.pem
 │   ├── server_key.pem
@@ -206,11 +208,11 @@ containers/vdl_node_1
 7 directories, 7 files
 ```
 
-> **Note**: If you need access to the unseal key, you can find it along with the initial root token value in the `.vdl_node_1_init` file.
+> **Note**: If you need access to the unseal key, you can find it along with the initial root token value in the `.Vault Docker lab_node_1_init` file.
 
 ### Run a certain Vault version
 
-VDL offers the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:
+Vault Docker lab offers the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:
 
 ```shell
 TF_VAR_vault_version=1.11.0 make
@@ -220,7 +222,7 @@ TF_VAR_vault_version=1.11.0 make
 
 ### Run Vault Enterprise
 
-VDL runs the Vault community edition by default, but you can also run the Enterprise edition.
+Vault Docker lab runs the Vault community edition by default, but you can also run the Enterprise edition.
 
 > **NOTE**: You must have an [Enterprise license](https://www.hashicorp.com/products/vault/pricing) to run the Vault Enterprise image.
 
@@ -236,7 +238,7 @@ Export the `TF_VAR_vault_edition` environment variable to specify `vault-enterpr
 export TF_VAR_vault_edition=vault-enterprise
 ```
 
-Make VDL.
+Make Vault Docker lab.
 
 ```shell
 make
@@ -252,9 +254,9 @@ TF_VAR_vault_log_level=Debug make
 
 ### Stage a cluster
 
-By default, VDL automatically initializes and unseals Vault. If you'd rather perform these steps yourself, you can specify that they're skipped.
+By default, Vault Docker lab automatically initializes and unseals Vault. If you'd rather perform these steps yourself, you can specify that they're skipped.
 
-Stage a cluster.
+Stage a cluster:
 
 ```shell
 make stage
@@ -263,34 +265,46 @@ make stage
 Example output:
 
 ```plaintext
-[VDL] Initializing Terraform workspace ...Done.
-[VDL] Applying Terraform configuration ...Done.
-[VDL] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-[VDL] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
+[Vault Docker lab] Initializing Terraform workspace ...Done.
+[Vault Docker lab] Applying Terraform configuration ...Done.
+[Vault Docker lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+[Vault Docker lab] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
 ```
 
-### Benchmark example
+### Enable telemetry stack
 
-You can use [vault-benchmark]() with the example configuration included in `benchmark-example/config/vault-benchmark-config.hcl` and this command line example (make sure you login with the initial root token first).
+You can enable a telemetry gathering stack consisting of Prometheus and Grafana containers with this command instead of just `make`:
 
 ```shell
-docker run \
-    --volume="$PWD"/benchmark-example:/config \
-    --ip 10.1.42.74 \
-    --name learn-vault-benchmark \
-    --network vault_docker_lab_network \
-    --env "VAULT_TOKEN=$(cat ~/.vault-token)" \
-    --env 'VAULT_ADDR=https://10.1.42.101:8200' \
-    --env 'VAULT_SKIP_VERIFY=true' \
-    --rm \
-    hashicorp/vault-benchmark vault-benchmark run -config=/config/vault-benchmark-config.hcl
+make with-telemetry
+```
+
+Example output:
+
+```plaintext
+👋 Hello from Vault Docker Lab
+[+] Initializing Terraform workspace ...done.
+[+] Applying Terraform configuration ...done.
+[+] Check Vault active node status ...ok.
+[+] Check Vault initialization status ...ok.
+[+] Unsealing cluster nodes .....node 2. node 3. node 4. node 5. done.
+[+] Enable audit device on vdl_node_1 in /vault/logs/vault_audit.log done.
+[+] [Prometheus] initializing Terraform workspace ...done.
+[+] [Prometheus] Applying Terraform configuration ...done.
+[i] [Prometheus] web interface available at http://127.0.0.1:9090
+[+] [Grafana] initializing Terraform workspace ...done.
+[+] [Grafana] Applying Terraform configuration ...done.
+[i] [Grafana] web interface available at http://127.0.0.1:3000
+
+[i] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+[i] Login to Vault with initial root token: vault login hvs.rCKq3...c0ff33...HUxxvo7
 ```
 
 ### Docker resource usage
 
-The screenshot shows a VDL that has been up but idle for 25 minutes.
+The screenshot shows a Vault Docker lab that has been up but idle for 25 minutes.
 
-<img width="732" alt="2023-09-01_14-04-54" src="https://github.com/hashicorp-education/learn-vault-docker-lab/assets/77563/5ff76eed-7c70-4bdd-bca2-3a478d878b10">
+<img width="732" alt="Docker screenshot showing Vault Docker lab resource usage" src="https://github.com/hashicorp-education/learn-vault-docker-lab/assets/77563/5ff76eed-7c70-4bdd-bca2-3a478d878b10">
 
 ### Cleanup
 
@@ -304,6 +318,24 @@ Example output:
 
 ```plaintext
 👋 Hello from Vault Docker Lab
+[-] Destroying Terraform configuration ...done.
+[-] Removing created artifacts ...done.
+```
+
+or, if you enabled the telemetry stack:
+
+```shell
+make clean-with-telemetry
+```
+
+Example output:
+
+```plaintext
+👋 Hello from Vault Docker Lab
+[-] [Grafana] Destroying Terraform configuration ...done.
+[-] [Grafana] Removing artifacts created by Vault Docker Lab ...done.
+[-] [Prometheus] Destroying Terraform configuration ...done.
+[-] [Prometheus] Removing artifacts created by Vault Docker Lab ...done.
 [-] Destroying Terraform configuration ...done.
 [-] Removing created artifacts ...done.
 ```
