@@ -10,7 +10,7 @@ VDL_INIT = $(HERE)/.vdl_node_1_init
 VDL_LOG_FILE = $(HERE)/vaut_docker_lab.log
 VDL_VAULT_LOGS = $(HERE)/containers/vdl_node_?/logs/*
 
-default: all done
+default: all done-vault
 
 all: prerequisites \
 	provision \
@@ -25,7 +25,7 @@ stage: prerequisites provision done-stage
 greetings:
 	@echo "👋 Hello from $(MY_NAME_IS)"
 
-with-telemetry: all telemetry-prometheus telemetry-grafana done
+telemetry: greetings telemetry-prometheus telemetry-grafana
 
 telemetry-prometheus:
 	@cd $(HERE)/containers/prometheus && printf "[+] [Prometheus] initializing Terraform workspace ..." && terraform init > $(PROMETHEUS_CONTAINER_LOG_FILE) && echo 'done.' && printf "[+] [Prometheus] Applying Terraform configuration ..." && terraform apply -auto-approve >> $(PROMETHEUS_CONTAINER_LOG_FILE) && echo 'done.' && cd $(HERE)
@@ -33,12 +33,12 @@ telemetry-prometheus:
 
 telemetry-grafana:
 	@cd $(HERE)/containers/grafana && printf "[+] [Grafana] initializing Terraform workspace ..." && terraform init > $(GRAFANA_CONTAINER_LOG_FILE) && echo 'done.' && printf "[+] [Grafana] Applying Terraform configuration ..." && terraform apply -auto-approve >> $(GRAFANA_CONTAINER_LOG_FILE) && echo 'done.' && cd $(HERE)
-	@echo "[i] [Grafana] web interface available at http://127.0.0.1:3000"
+	@echo "[i] [Grafana] web interface available at http://127.0.0.1:3001"
 
 load-test:
 	@echo "[+] Vault Benchmark load test"
 
-done:
+done-vault:
 	@echo "\n[i] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"
 	@echo "[i] Login to Vault with initial root token: vault login $(ROOT_TOKEN)"
 
@@ -124,7 +124,7 @@ clean-grafana:
 clean-prometheus:
 	@cd $(HERE)/containers/prometheus && printf "[-] [Prometheus] Destroying Terraform configuration ..." && terraform destroy -auto-approve >> $(PROMETHEUS_CONTAINER_LOG_FILE) && echo 'done.' && printf "[-] [Prometheus] Removing artifacts created by $(MY_NAME_IS) ..." && echo 'done.' && cd $(HERE)
 
-clean-with-telemetry: greetings clean-grafana clean-prometheus clean-base 
+clean-telemetry: greetings clean-grafana clean-prometheus
 
 cleanest: greetings clean-base
 	@printf "[-] Removing all Terraform runtime configuration and state ..."

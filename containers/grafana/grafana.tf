@@ -38,7 +38,7 @@ resource "docker_container" "vault-docker-lab-grafana" {
 
   ports {
     internal = 3000
-    external = 3000
+    external = 3001
     protocol = "tcp"
   }
 

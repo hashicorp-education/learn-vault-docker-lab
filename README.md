@@ -212,7 +212,7 @@ containers/Vault Docker lab_node_1
 
 ### Run a certain Vault version
 
-Vault Docker lab offers the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:
+Vault Docker lab offers the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable:
 
 ```shell
 TF_VAR_vault_version=1.11.0 make
@@ -273,10 +273,10 @@ Example output:
 
 ### Enable telemetry stack
 
-You can enable a telemetry gathering stack consisting of Prometheus and Grafana containers with this command instead of just `make`:
+After establishing the Vault Docker Lab, you can enable a telemetry gathering stack consisting of Prometheus and Grafana containers with this command instead of just `make`:
 
 ```shell
-make with-telemetry
+make telemetry
 ```
 
 Example output:
