@@ -55,7 +55,7 @@ Follow these steps to run your own Vault Docker lab.
      ```shell
      sudo security add-trusted-cert -d -r trustAsRoot \
         -k /Library/Keychains/System.keychain \
-        ./containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem
+        ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem
      ```
 
      > **NOTE**: The OS prompts for your user password, and sometimes prompts twice; enter your user password as needed to add the certificate.
@@ -115,7 +115,7 @@ Follow these steps to run your own Vault Docker lab.
        Copy the Vault Docker lab CA certificate to `/usr/local/share/ca-certificates`.
 
        ```shell
-       sudo cp containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem \
+       sudo cp containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
            /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
        # No output expected
        ```
@@ -135,7 +135,7 @@ Follow these steps to run your own Vault Docker lab.
        From within this repository directory, copy the Vault Docker lab CA certificate to the `/etc/pki/ca-trust/source/anchors` directory.
 
         ```shell
-        sudo cp ./containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem \
+        sudo cp ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
             /etc/pki/ca-trust/source/anchors/vault_docker_lab_ca.crt
         # No output expected
         ```
@@ -150,7 +150,7 @@ Follow these steps to run your own Vault Docker lab.
        From within this repository directory, copy the Vault Docker lab CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
-        sudo cp ./containers/Vault Docker lab_node_1/certs/vault_docker_lab_ca.pem \
+        sudo cp ./containers/vdl_node_1/certs/vault_docker_lab_ca.pem \
             /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
         # No output expected
         ```
@@ -184,13 +184,13 @@ Follow these steps to run your own Vault Docker lab.
 The configuration, data, and audit device log files live in a subdirectory  named after the server under `containers`. For example, here is the structure of the first server, _Vault Docker lab_node_1_ as it appears when active.
 
 ```shell
-tree containers/Vault Docker lab_node_1
+tree containers/vdl_node_1
 ```
 
 Example output:
 
 ```plaintext
-containers/Vault Docker lab_node_1
+containers/vdl_node_1
 ├── certs
 │   ├── server_cert.pem
 │   ├── server_key.pem
@@ -208,7 +208,7 @@ containers/Vault Docker lab_node_1
 7 directories, 7 files
 ```
 
-> **Note**: If you need access to the unseal key, you can find it along with the initial root token value in the `.Vault Docker lab_node_1_init` file.
+> **Note**: If you need access to the unseal key, you can find it along with the initial root token value in the `.vdl_node_1_init` file.
 
 ### Run a certain Vault version
 
