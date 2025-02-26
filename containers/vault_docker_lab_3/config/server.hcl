@@ -12,7 +12,7 @@ listener "tcp" {
 }
 
 storage "raft" {
-  path    = "/vault/data"
+  path    = "/vault"
   node_id = "vault-docker-lab-3"
 
   retry_join {
