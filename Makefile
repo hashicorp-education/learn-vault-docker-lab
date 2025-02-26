@@ -73,7 +73,7 @@ clean:
 	@printf "$(MY_NAME_IS) Destroying Terraform configuration ..."
 	@terraform destroy -auto-approve >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@echo 'Done.'
-	@printf "$(MY_NAME_IS) Removing artifacts created by VAULT_DOCKER_LAB ..."
+	@printf "$(MY_NAME_IS) Removing artifacts created by vault-docker-lab ..."
 	@rm -rf $(VAULT_DOCKER_LAB_DATA)
 	@rm -f $(VAULT_DOCKER_LAB_INIT)
 	@rm -rf $(VAULT_DOCKER_LAB_AUDIT_LOGS)
