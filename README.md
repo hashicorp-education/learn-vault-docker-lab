@@ -195,6 +195,37 @@ containers/vault_docker_lab_1
 7 directories, 7 files
 ```
 
+### Enable the monitoring stack
+
+Vault Docker lab ships with Prometheus to get telemetry metrics from the cluster leader node, and Grafana to use Prometheus as a data source with a default dashboard for visualization.
+
+You can enable the complete monitoring stack by starting Vault Docker Lab with this command:
+
+```shell
+make with-monitoring
+```
+
+This enables both Prometheus and Grafana, with everything configured for you.
+
+You can access Grafana at [http://localhost:3001](http://localhost:3001) with these credentials:
+
+- Username: `admin`
+- Password: `2LearnVault`
+
+If you need to separately enable Prometheus, you can use:
+
+```shell
+make prometheus
+```
+
+Likewise, you can separately enable Grafana with:
+
+```shell
+make grafana
+```
+
+The monitoring stack is automatically cleaned up when you use `make clean`.
+
 ### Run a specific Vault version
 
 Vault Docker Lab tries to keep current and offer the latest available Vault Docker image version. You can run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this: 
@@ -204,22 +235,6 @@ TF_VAR_vault_version=1.11.0 make
 ```
 
 > **Tip**: Vault versions >= 1.11.0 are ideal for Integrated Storage support.
-
-### Enable monitoring stack
-
-The Vault Docker lab ships with Prometheus and Grafana configured to function with the cluster active leader node.
-
-You can enable Prometheus with:
-
-```shell
-make prometheus
-```
-
-You can enable Grafana with:
-
-```shell
-make grafana
-```
 
 ### Run Vault Enterprise
 
@@ -338,6 +353,6 @@ If you are new to Vault, check out the **Get Started** tutorial series:
 - [HCP Vault Quick Start](https://developer.hashicorp.com/vault/tutorials/cloud)
 - [UI Quick Start](https://developer.hashicorp.com/vault/tutorials/getting-started-ui)
 
-The tutorial library also has a wide range of intermediate and advanced tutorials with integrated learnings labs.
+The tutorial library also has a wide range of intermediate and advanced tutorials with integrated learning labs.
 
 The [API documentation](https://developer.hashicorp.com/vault/api-docs) and [product documentation](https://developer.hashicorp.com/vault/docs) are also great learning resources.
