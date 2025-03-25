@@ -1,6 +1,13 @@
 # Self-Signed TLS Details
 
-The TLS certificates and keys used by Vault Docker Lab are self-signed and were generated with the Vault PKI secrets engine based on the guidance in the [Build Your Own Certificate Authority (CA)](https://developer.hashicorp.com/vault/tutorials/secrets-management/pki-engine) tutorial.
+The TLS certificates and keys used by vault-docker-lab are self-signed and were generated with the Vault PKI secrets engine based on the guidance in the [Build Your Own Certificate Authority (CA)](https://developer.hashicorp.com/vault/tutorials/secrets-management/pki-engine) tutorial.
+
+You can use the script `containers/bin/generate-tls` to regenerate new TLS material for the project. This script requires a running Vault dev mode server with VAULT_ADDR=http://localhost:8200 and VAULT_TOKEN=root. It does the following:
+
+- Creates a root certificate authority (CA)
+- Creates an intermediate CA signed by the root CA
+- Creates certificates and keys for Vault nodes and extras
+- Installs the certificates and keys into each container filesystem
 
 Here are the exact commands used to generate the current set.
 
@@ -17,12 +24,15 @@ vault secrets tune -max-lease-ttl=87600h pki
 ```shell
 vault write -field=certificate pki/root/generate/internal \
      common_name="vault-docker-lab.lan" \
-     issuer_name="root-2023" \
-     ttl=87600h > root_2023_ca.crt
+     issuer_name="root-2025" \
+     ttl=87600h > root_2025_ca.crt
 ```
 
 ```shell
-vault write pki/roles/2023-servers allow_any_name=true
+vault write pki/roles/2025-servers \
+    allow_any_name=true \
+     allow_subdomains=true \
+    allow_localhost=true
 ```
 
 ```shell
@@ -41,41 +51,33 @@ vault secrets enable -path=pki_int pki
 vault secrets tune -max-lease-ttl=43800h pki_int
 ```
 
-List issuers to get root CA issuer ID:
-
 ```shell
-vault list pki/issuers                  
-Keys
-----
-89f920f3-9139-b45d-1b22-4e51382d600e
+vault write -format=json pki_int/intermediate/generate/internal \
+     common_name="vault-docker-lab.lan Intermediate Authority" \
+     issuer_name="vault-docker-lab-dot-lan-intermediate" \
+     | jq -r '.data.csr' > pki_intermediate.csr
 ```
 
-Use issuer ID in PKI issue command:
-
 ```shell
-vault pki issue \
-    --issuer_name=vault-docker-lab-intermediate \
-    /pki/issuer/89f920f3-9139-b45d-1b22-4e51382d600e \
-    /pki_int/ \
-    common_name="vault-docker-lab.lan Intermediate Authority" \
-    o="vault-docker-lab" \
-    ou="education" \
-    key_type="rsa" \
-    key_bits="4096" \
-    max_depth_len=1 \
-    permitted_dns_domains="localhost,vault-docker-lab.lan" \
-    ttl="43800h"
+vault write -format=json pki/root/sign-intermediate \
+     issuer_ref="root-2025" \
+     csr=@pki_intermediate.csr \
+     format=pem_bundle ttl="43800h" \
+     | jq -r '.data.certificate' > intermediate.cert.pem
 ```
 
-Create role for intermediate CA.
+```shell
+vault write pki_int/intermediate/set-signed certificate=@intermediate.cert.pem
+```
 
 ```shell
 vault write pki_int/roles/vault-docker-lab-dot-lan \
-     issuer_ref=vault-docker-lab-intermediate \
-     allowed_domains="localhost,vault-docker-lab.lan" \
+     issuer_ref="$(vault read -field=default pki_int/config/issuers)" \
+     allowed_domains="vault-docker-lab.lan" \
      allow_subdomains=true \
-     max_ttl="43800h" \
-     ttl="17520"
+     allow_localhost=true \
+     allow_any_name=true \
+     max_ttl="8760h"
 ```
 
 ## Certificates and Keys
@@ -117,5 +119,29 @@ vault write pki_int/issue/vault-docker-lab-dot-lan \
     alt_names="localhost" \
     common_name="vault-docker-lab5.vault-docker-lab.lan" \
     ip_sans="127.0.0.1,10.1.42.105" \
+    ttl="8760h"
+```
+
+```shell
+vault write pki_int/issue/vault-docker-lab-dot-lan \
+    alt_names="localhost" \
+    common_name="loadbalancer.vault-docker-lab.lan" \
+    ip_sans="127.0.0.1,10.1.42.10" \
+    ttl="8760h"
+```
+
+```shell
+vault write pki_int/issue/vault-docker-lab-dot-lan \
+    alt_names="localhost" \
+    common_name="prometheus.vault-docker-lab.lan" \
+    ip_sans="127.0.0.1,10.1.42.211" \
+    ttl="8760h"
+```
+
+```shell
+vault write pki_int/issue/vault-docker-lab-dot-lan \
+    alt_names="localhost" \
+    common_name="grafana.vault-docker-lab.lan" \
+    ip_sans="127.0.0.1,10.1.42.212" \
     ttl="8760h"
 ```

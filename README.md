@@ -1,26 +1,16 @@
 # Vault Docker Lab
 
-```plaintext
- _   __          ____    ___           __             __        __ 
-| | / /__ ___ __/ / /_  / _ \___  ____/ /_____ ____  / /  ___ _/ / 
-| |/ / _ `/ // / / __/ / // / _ \/ __/  '_/ -_) __/ / /__/ _ `/ _ \
-|___/\_,_/\_,_/_/\__/ /____/\___/\__/_/\_\\__/_/   /____/\_,_/_.__/
-                                                                   
-Vault Docker Lab is a minimal Vault cluster Terraformed onto Docker containers.
-It is useful for development and testing, but not for production.
-```
-
 ## What?
 
-Vault Docker Lab is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault Docker image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). It is powered by a `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs).
+Vault Docker Lab is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault Docker image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). A `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs) power the cluster deployment.
 
 ## Why?
 
-To quickly establish a local Vault cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, and testing.
+To establish a small local Vault cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, and testing, but **certainly not for production**.
 
 ## How?
 
-You can make your own Vault Docker Lab with Docker, Terraform, and the Terraform Docker provider.
+You can make your own Vault Docker Lab with this repository.
 
 ## Prerequisites
 
@@ -30,7 +20,7 @@ To make a Vault Docker Lab, your host computer must have the following software 
 
 - [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.5.6 darwin_arm64 on macOS version 13.5.1)
 
-> **NOTE:** Vault Docker Lab is currently known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors.
+> **NOTE:** Vault Docker Lab functions on Linux (last tested on Ubuntu 22.04) and macOS (last tested on 15.3.2) with Intel or Apple silicon processors.
 
 ## Make your own Vault Docker Lab
 
@@ -55,10 +45,10 @@ There are just a handful of steps to make your own Vault Docker Lab.
      ```shell
      sudo security add-trusted-cert -d -r trustAsRoot \
         -k /Library/Keychains/System.keychain \
-        ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem
+        ./containers/vault_docker_lab_1/certs/vault-docker-lab-ca.pem
      ```
 
-     > **NOTE**: You will be prompted for your user password and sometimes could be prompted twice; enter your user password as needed to add the certificate.
+     > **NOTE**: The `sudo` utility prompts for your user password, and sometimes can prompt twice; enter your user password as needed to add the certificate to the macOS keychain.
 
    - For Linux:
 
@@ -79,8 +69,8 @@ There are just a handful of steps to make your own Vault Docker Lab.
         From within this repository directory, copy the Vault Docker Lab CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
-        sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
-            /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
+        sudo cp ./containers/vault_docker_lab_1/certs/vault-docker-lab-ca.pem \
+            /usr/local/share/ca-certificates/vault-docker-lab-ca.crt
         # No output expected
         ```
 
@@ -115,8 +105,8 @@ There are just a handful of steps to make your own Vault Docker Lab.
        Copy the Vault Docker Lab CA certificate to `/usr/local/share/ca-certificates`.
 
        ```shell
-       sudo cp containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
-           /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
+       sudo cp containers/vault_docker_lab_1/certs/vault-docker-lab-ca.pem \
+           /usr/local/share/ca-certificates/vault-docker-lab-ca.crt
        # No output expected
        ```
 
@@ -135,8 +125,8 @@ There are just a handful of steps to make your own Vault Docker Lab.
        From within this repository directory, copy the Vault Docker Lab CA certificate to the `/etc/pki/ca-trust/source/anchors` directory.
 
         ```shell
-        sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
-            /etc/pki/ca-trust/source/anchors/vault_docker_lab_ca.crt
+        sudo cp ./containers/vault_docker_lab_1/certs/vault-docker-lab-ca.pem \
+            /etc/pki/ca-trust/source/anchors/vault-docker-lab-ca.crt
         # No output expected
         ```
 
@@ -150,8 +140,8 @@ There are just a handful of steps to make your own Vault Docker Lab.
        From within this repository directory, copy the Vault Docker Lab CA certificate to the `/usr/local/share/ca-certificates` directory.
 
         ```shell
-        sudo cp ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem \
-            /usr/local/share/ca-certificates/vault_docker_lab_ca.crt
+        sudo cp ./containers/vault_docker_lab_1/certs/vault-docker-lab-ca.pem \
+            /usr/local/share/ca-certificates/vault-docker-lab-ca.crt
         # No output expected
         ```
 
@@ -183,16 +173,16 @@ The following notes should help you better understand the container structure Va
 
 ### Configuration, data & logs
 
-The configuration, data, and audit device log files live in a subdirectory under `containers` that is named after the server. For example, here is the structure of the first server, _vault_docker_lab_1_ as it appears when active.
+The configuration, data, TLS material, and audit device log files live in a subdirectory under `containers` for each server. For example, here is the structure of the first server, _vault_docker_lab_1_ as it appears when active.
 
 ```shell
 $ tree containers/vault_docker_lab_1
 containers/vault_docker_lab_1
 ├── certs
-│   ├── server_cert.pem
-│   ├── server_key.pem
-│   ├── vault_docker_lab_ca.pem
-│   └── vault_docker_lab_ca_chain.pem
+│   ├── server-cert.pem
+│   ├── server-key.pem
+│   ├── vault-docker-lab-ca.pem
+│   └── vault_docker-lab-ca-chain.pem
 ├── config
 │   └── server.hcl
 ├── data
@@ -207,13 +197,13 @@ containers/vault_docker_lab_1
 
 ### Run a specific Vault version
 
-Vault Docker Lab tries to keep current and offer the latest available Vault Docker image version, but you can also run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this:. 
+Vault Docker Lab tries to keep current and offer the latest available Vault Docker image version. You can run a specific version of Vault for which an image exists with the `TF_VAR_vault_version` environment variable like this: 
 
 ```shell
 TF_VAR_vault_version=1.11.0 make
 ```
 
-> **Tip**: Vault versions >= 1.11.0 are recommended for ideal Integrated Storage support.
+> **Tip**: Vault versions >= 1.11.0 are ideal for Integrated Storage support.
 
 ### Run Vault Enterprise
 
@@ -310,7 +300,7 @@ To remove the CA certificate from your OS trust store:
   # no output expected
   ```
 
-  - You will be prompted for your user password; enter it to add the certificate.
+  - The `sudo` utility prompts for your user password; enter your user password to add the certificate.
 
 - For Linux:
 
@@ -332,6 +322,6 @@ If you are new to Vault, check out the **Get Started** tutorial series:
 - [HCP Vault Quick Start](https://developer.hashicorp.com/vault/tutorials/cloud)
 - [UI Quick Start](https://developer.hashicorp.com/vault/tutorials/getting-started-ui)
 
-The tutorial library also has a wide range of intermediate and advanced tutorials with integrated hands on labs.
+The tutorial library also has a wide range of intermediate and advanced tutorials with integrated learnings labs.
 
 The [API documentation](https://developer.hashicorp.com/vault/api-docs) and [product documentation](https://developer.hashicorp.com/vault/docs) are also great learning resources.

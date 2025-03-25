@@ -1,8 +1,3 @@
-#  _   __          ____    ___           __             __        __ 
-# | | / /__ ___ __/ / /_  / _ \___  ____/ /_____ ____  / /  ___ _/ / 
-# | |/ / _ `/ // / / __/ / // / _ \/ __/  '_/ -_) __/ / /__/ _ `/ _ \
-# |___/\_,_/\_,_/_/\__/ /____/\___/\__/_/\_\\__/_/   /____/\_,_/_.__/
-#                                                                    
 # Vault Docker Lab is a minimal Vault cluster Terraformed on Docker
 # It is useful for development and testing, but not for production.
 
@@ -41,11 +36,11 @@ resource "docker_image" "vault" {
 
 locals {
   vault_containers = {
-    "vault_docker_lab_1" = { ipv4_address = "10.1.42.101", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.101:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.101:8200", "VAULT_CACERT=/vault/certs/vault_docker_lab_ca.pem"], internal_port = "8200", external_port = "8200", host_path_certs = "${path.cwd}/containers/vault_docker_lab_1/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_1/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_1/logs" },
-    "vault_docker_lab_2" = { ipv4_address = "10.1.42.102", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.102:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.102:8200", "VAULT_CACERT=/vault/certs/vault_docker_lab_ca.pem"], internal_port = "8200", external_port = "8220", host_path_certs = "${path.cwd}/containers/vault_docker_lab_2/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_2/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_2/logs" },
-    "vault_docker_lab_3" = { ipv4_address = "10.1.42.103", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.103:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.103:8200", "VAULT_CACERT=/vault/certs/vault_docker_lab_ca.pem"], internal_port = "8200", external_port = "8230", host_path_certs = "${path.cwd}/containers/vault_docker_lab_3/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_3/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_3/logs" },
-    "vault_docker_lab_4" = { ipv4_address = "10.1.42.104", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.104:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.104:8200", "VAULT_CACERT=/vault/certs/vault_docker_lab_ca.pem"], internal_port = "8200", external_port = "8240", host_path_certs = "${path.cwd}/containers/vault_docker_lab_4/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_4/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_4/logs" },
-    "vault_docker_lab_5" = { ipv4_address = "10.1.42.105", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.105:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.105:8200", "VAULT_CACERT=/vault/certs/vault_docker_lab_ca.pem"], internal_port = "8200", external_port = "8250", host_path_certs = "${path.cwd}/containers/vault_docker_lab_5/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_5/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_5/logs" }
+    "vault-1" = { ipv4_address = "10.1.42.101", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.101:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.101:8200", "VAULT_CACERT=/vault/certs/vault-docker-lab-ca.pem"], internal_port = "8200", external_port = "8200", host_path_certs = "${path.cwd}/containers/vault_docker_lab_1/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_1/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_1/logs" },
+    "vault-2" = { ipv4_address = "10.1.42.102", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.102:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.102:8200", "VAULT_CACERT=/vault/certs/vault-docker-lab-ca.pem"], internal_port = "8200", external_port = "8220", host_path_certs = "${path.cwd}/containers/vault_docker_lab_2/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_2/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_2/logs" },
+    "vault-3" = { ipv4_address = "10.1.42.103", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.103:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.103:8200", "VAULT_CACERT=/vault/certs/vault-docker-lab-ca.pem"], internal_port = "8200", external_port = "8230", host_path_certs = "${path.cwd}/containers/vault_docker_lab_3/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_3/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_3/logs" },
+    "vault-4" = { ipv4_address = "10.1.42.104", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.104:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.104:8200", "VAULT_CACERT=/vault/certs/vault-docker-lab-ca.pem"], internal_port = "8200", external_port = "8240", host_path_certs = "${path.cwd}/containers/vault_docker_lab_4/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_4/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_4/logs" },
+    "vault-5" = { ipv4_address = "10.1.42.105", env = [ "VAULT_LICENSE=${var.vault_license}", "VAULT_CLUSTER_ADDR=https://10.1.42.105:8201", "VAULT_REDIRECT_ADDR=https://10.1.42.105:8200", "VAULT_CACERT=/vault/certs/vault-docker-lab-ca.pem"], internal_port = "8200", external_port = "8250", host_path_certs = "${path.cwd}/containers/vault_docker_lab_5/certs", host_path_config = "${path.cwd}/containers/vault_docker_lab_5/config", host_path_logs = "${path.cwd}/containers/vault_docker_lab_5/logs" }
   }
 }
 
@@ -110,7 +105,7 @@ resource "null_resource" "active_node_init" {
     command = "while ! curl --insecure --fail --silent https://127.0.0.1:8200/v1/sys/seal-status --output /dev/null ; do printf '.' ; sleep 4 ; done ; vault operator init -key-shares=1 -key-threshold=1 > ${path.cwd}/.vault_docker_lab_1_init"
     environment = {
       VAULT_ADDR = "https://127.0.0.1:8200"
-      VAULT_CACERT = "${path.cwd}/containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem"
+      VAULT_CACERT = "${path.cwd}/containers/vault_docker_lab_1/certs/vault-docker-lab-ca.pem"
     }
   }
 
@@ -125,7 +120,7 @@ resource "null_resource" "active_node_unseal" {
     command = "while [ ! -f ${path.cwd}/.vault_docker_lab_1_init ] ; do printf '.' ; sleep 1 ; done &&export UNSEAL_KEY=$(grep 'Unseal Key 1' ${path.cwd}/.vault_docker_lab_1_init | awk '{print $NF}') && vault operator unseal $UNSEAL_KEY"
     environment = {
       VAULT_ADDR = "https://127.0.0.1:8200"
-      VAULT_CACERT = "${path.cwd}/containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem"
+      VAULT_CACERT = "${path.cwd}/containers/vault_docker_lab_1/certs/vault-docker-lab-ca.pem"
     }
   }
 

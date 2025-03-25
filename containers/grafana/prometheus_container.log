@@ -1,0 +1,377 @@
+
+[0m[1m[32mNo changes.[0m[1m No objects need to be destroyed.[0m
+
+[0mEither you have not created any objects yet or the existing objects were
+already deleted outside of Terraform.
+[0m[1m[32m
+Destroy complete! Resources: 0 destroyed.
+[0m[0m[1mdocker_image.grafana: Refreshing state... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Refreshing state... [id=86b1cd376f1176a5ac8797c6de9638e9aece94bcef9eec12be6637ee681db5d3][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # docker_image.grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_image" "grafana" {
+      [31m-[0m[0m id           = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m image_id     = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m keep_locally = true [90m-> null[0m[0m
+      [31m-[0m[0m name         = "grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m repo_digest  = "grafana/grafana-enterprise@sha256:3add10ecf53d5115cb95f1305d3bc810397e4bf5176570976fdb03aac9d3ba67" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m 0 to add, 0 to change, 1 to destroy.
+[0m[0m[1mdocker_image.grafana: Destroying... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m[0m
+[0m[1mdocker_image.grafana: Destruction complete after 0s[0m
+[0m[1m[32m
+Destroy complete! Resources: 1 destroyed.
+[0m[0m[1mdocker_image.grafana: Refreshing state... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Refreshing state... [id=dadbc66cacb78642b7a6315b9517ad1b0a28c04bd0d09405bd49a8e2fa5ba16d][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # docker_image.grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_image" "grafana" {
+      [31m-[0m[0m id           = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m image_id     = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m keep_locally = true [90m-> null[0m[0m
+      [31m-[0m[0m name         = "grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m repo_digest  = "grafana/grafana-enterprise@sha256:3add10ecf53d5115cb95f1305d3bc810397e4bf5176570976fdb03aac9d3ba67" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m 0 to add, 0 to change, 1 to destroy.
+[0m[0m[1mdocker_image.grafana: Destroying... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m[0m
+[0m[1mdocker_image.grafana: Destruction complete after 0s[0m
+[0m[1m[32m
+Destroy complete! Resources: 1 destroyed.
+[0m[0m[1mdocker_image.grafana: Refreshing state... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Refreshing state... [id=ab0a4db54d7273bf6159cd7bba62fbf9fcef03b768240b4b3b00cea63f9ca323][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # docker_image.grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_image" "grafana" {
+      [31m-[0m[0m id           = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m image_id     = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m keep_locally = true [90m-> null[0m[0m
+      [31m-[0m[0m name         = "grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m repo_digest  = "grafana/grafana-enterprise@sha256:3add10ecf53d5115cb95f1305d3bc810397e4bf5176570976fdb03aac9d3ba67" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m 0 to add, 0 to change, 1 to destroy.
+[0m[0m[1mdocker_image.grafana: Destroying... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m[0m
+[0m[1mdocker_image.grafana: Destruction complete after 0s[0m
+[0m[1m[32m
+Destroy complete! Resources: 1 destroyed.
+[0m[0m[1mdocker_image.grafana: Refreshing state... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Refreshing state... [id=78bc5167c74679d045c14efb246c408394c49c8ec582b57fd58e3b218d4fa145][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # docker_image.grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_image" "grafana" {
+      [31m-[0m[0m id           = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m image_id     = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m keep_locally = true [90m-> null[0m[0m
+      [31m-[0m[0m name         = "grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m repo_digest  = "grafana/grafana-enterprise@sha256:3add10ecf53d5115cb95f1305d3bc810397e4bf5176570976fdb03aac9d3ba67" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m 0 to add, 0 to change, 1 to destroy.
+[0m[0m[1mdocker_image.grafana: Destroying... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m[0m
+[0m[1mdocker_image.grafana: Destruction complete after 0s[0m
+[0m[1m[32m
+Destroy complete! Resources: 1 destroyed.
+[0m
+[0m[1m[32mNo changes.[0m[1m No objects need to be destroyed.[0m
+
+[0mEither you have not created any objects yet or the existing objects were
+already deleted outside of Terraform.
+[0m[1m[32m
+Destroy complete! Resources: 0 destroyed.
+[0m[0m[1mdocker_image.grafana: Refreshing state... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Refreshing state... [id=06abd77d861cfb8bdc92da7333c8aa151beb87a3aaf199fc88a7d35ca3658075][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # docker_container.vault-docker-lab-grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_container" "vault-docker-lab-grafana" {
+      [31m-[0m[0m attach                                      = false [90m-> null[0m[0m
+      [31m-[0m[0m command                                     = [] [90m-> null[0m[0m
+      [31m-[0m[0m container_read_refresh_timeout_milliseconds = 15000 [90m-> null[0m[0m
+      [31m-[0m[0m cpu_shares                                  = 0 [90m-> null[0m[0m
+      [31m-[0m[0m dns                                         = [] [90m-> null[0m[0m
+      [31m-[0m[0m dns_opts                                    = [] [90m-> null[0m[0m
+      [31m-[0m[0m dns_search                                  = [] [90m-> null[0m[0m
+      [31m-[0m[0m entrypoint                                  = [
+          [31m-[0m[0m "/run.sh",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m env                                         = [] [90m-> null[0m[0m
+      [31m-[0m[0m group_add                                   = [] [90m-> null[0m[0m
+      [31m-[0m[0m hostname                                    = "grafana" [90m-> null[0m[0m
+      [31m-[0m[0m id                                          = "06abd77d861cfb8bdc92da7333c8aa151beb87a3aaf199fc88a7d35ca3658075" [90m-> null[0m[0m
+      [31m-[0m[0m image                                       = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m init                                        = false [90m-> null[0m[0m
+      [31m-[0m[0m ipc_mode                                    = "private" [90m-> null[0m[0m
+      [31m-[0m[0m log_driver                                  = "json-file" [90m-> null[0m[0m
+      [31m-[0m[0m log_opts                                    = {} [90m-> null[0m[0m
+      [31m-[0m[0m logs                                        = false [90m-> null[0m[0m
+      [31m-[0m[0m max_retry_count                             = 0 [90m-> null[0m[0m
+      [31m-[0m[0m memory                                      = 0 [90m-> null[0m[0m
+      [31m-[0m[0m memory_swap                                 = 0 [90m-> null[0m[0m
+      [31m-[0m[0m must_run                                    = true [90m-> null[0m[0m
+      [31m-[0m[0m name                                        = "grafana" [90m-> null[0m[0m
+      [31m-[0m[0m network_data                                = [
+          [31m-[0m[0m {
+              [31m-[0m[0m gateway                   = "10.1.42.1"
+              [31m-[0m[0m global_ipv6_prefix_length = 0
+              [31m-[0m[0m ip_address                = "10.1.42.202"
+              [31m-[0m[0m ip_prefix_length          = 24
+              [31m-[0m[0m mac_address               = "02:42:0a:01:2a:ca"
+              [31m-[0m[0m network_name              = "vault_docker_lab_network"
+                [90m# (2 unchanged attributes hidden)[0m[0m
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m network_mode                                = "bridge" [90m-> null[0m[0m
+      [31m-[0m[0m privileged                                  = false [90m-> null[0m[0m
+      [31m-[0m[0m publish_all_ports                           = false [90m-> null[0m[0m
+      [31m-[0m[0m read_only                                   = false [90m-> null[0m[0m
+      [31m-[0m[0m remove_volumes                              = true [90m-> null[0m[0m
+      [31m-[0m[0m restart                                     = "no" [90m-> null[0m[0m
+      [31m-[0m[0m rm                                          = false [90m-> null[0m[0m
+      [31m-[0m[0m runtime                                     = "runc" [90m-> null[0m[0m
+      [31m-[0m[0m security_opts                               = [] [90m-> null[0m[0m
+      [31m-[0m[0m shm_size                                    = 64 [90m-> null[0m[0m
+      [31m-[0m[0m start                                       = true [90m-> null[0m[0m
+      [31m-[0m[0m stdin_open                                  = false [90m-> null[0m[0m
+      [31m-[0m[0m stop_timeout                                = 0 [90m-> null[0m[0m
+      [31m-[0m[0m storage_opts                                = {} [90m-> null[0m[0m
+      [31m-[0m[0m sysctls                                     = {} [90m-> null[0m[0m
+      [31m-[0m[0m tmpfs                                       = {} [90m-> null[0m[0m
+      [31m-[0m[0m tty                                         = false [90m-> null[0m[0m
+      [31m-[0m[0m user                                        = "472" [90m-> null[0m[0m
+      [31m-[0m[0m wait                                        = false [90m-> null[0m[0m
+      [31m-[0m[0m wait_timeout                                = 60 [90m-> null[0m[0m
+      [31m-[0m[0m working_dir                                 = "/usr/share/grafana" [90m-> null[0m[0m
+        [90m# (6 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m networks_advanced {
+          [31m-[0m[0m aliases      = [] [90m-> null[0m[0m
+          [31m-[0m[0m ipv4_address = "10.1.42.202" [90m-> null[0m[0m
+          [31m-[0m[0m name         = "vault_docker_lab_network" [90m-> null[0m[0m
+            [90m# (1 unchanged attribute hidden)[0m[0m
+        }
+
+      [31m-[0m[0m ports {
+          [31m-[0m[0m external = 3000 [90m-> null[0m[0m
+          [31m-[0m[0m internal = 3000 [90m-> null[0m[0m
+          [31m-[0m[0m ip       = "0.0.0.0" [90m-> null[0m[0m
+          [31m-[0m[0m protocol = "tcp" [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m volumes {
+          [31m-[0m[0m container_path = "/etc/grafana/grafana.crt" [90m-> null[0m[0m
+          [31m-[0m[0m host_path      = "/Users/brian/tmp/learn-vault-docker-lab/containers/grafana/certs/server_cert.pem" [90m-> null[0m[0m
+          [31m-[0m[0m read_only      = false [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+      [31m-[0m[0m volumes {
+          [31m-[0m[0m container_path = "/etc/grafana/grafana.key" [90m-> null[0m[0m
+          [31m-[0m[0m host_path      = "/Users/brian/tmp/learn-vault-docker-lab/containers/grafana/certs/server_key.pem" [90m-> null[0m[0m
+          [31m-[0m[0m read_only      = false [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+      [31m-[0m[0m volumes {
+          [31m-[0m[0m container_path = "/etc/grafana/provisioning/datasources/prometheus_datasource.yml" [90m-> null[0m[0m
+          [31m-[0m[0m host_path      = "/Users/brian/tmp/learn-vault-docker-lab/containers/grafana/datasource.yml" [90m-> null[0m[0m
+          [31m-[0m[0m read_only      = false [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+    }
+
+[1m  # docker_image.grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_image" "grafana" {
+      [31m-[0m[0m id           = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m image_id     = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m keep_locally = true [90m-> null[0m[0m
+      [31m-[0m[0m name         = "grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m repo_digest  = "grafana/grafana-enterprise@sha256:3add10ecf53d5115cb95f1305d3bc810397e4bf5176570976fdb03aac9d3ba67" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m 0 to add, 0 to change, 2 to destroy.
+[0m[0m[1mdocker_container.vault-docker-lab-grafana: Destroying... [id=06abd77d861cfb8bdc92da7333c8aa151beb87a3aaf199fc88a7d35ca3658075][0m[0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Destruction complete after 0s[0m
+[0m[1mdocker_image.grafana: Destroying... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m[0m
+[0m[1mdocker_image.grafana: Destruction complete after 0s[0m
+[0m[1m[32m
+Destroy complete! Resources: 2 destroyed.
+[0m[0m[1mdocker_image.grafana: Refreshing state... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Refreshing state... [id=8b918880cad669c09aae80ccd66dba5ca14d01d0b01da9bb117f160618edb07d][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # docker_image.grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_image" "grafana" {
+      [31m-[0m[0m id           = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m image_id     = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m keep_locally = true [90m-> null[0m[0m
+      [31m-[0m[0m name         = "grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m repo_digest  = "grafana/grafana-enterprise@sha256:3add10ecf53d5115cb95f1305d3bc810397e4bf5176570976fdb03aac9d3ba67" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m 0 to add, 0 to change, 1 to destroy.
+[0m[0m[1mdocker_image.grafana: Destroying... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m[0m
+[0m[1mdocker_image.grafana: Destruction complete after 0s[0m
+[0m[1m[32m
+Destroy complete! Resources: 1 destroyed.
+[0m
+[0m[1m[32mNo changes.[0m[1m No objects need to be destroyed.[0m
+
+[0mEither you have not created any objects yet or the existing objects were
+already deleted outside of Terraform.
+[0m[1m[32m
+Destroy complete! Resources: 0 destroyed.
+[0m[0m[1mdocker_image.grafana: Refreshing state... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Refreshing state... [id=bdddce33cb2a14f091201c944897531202058bbccb4454609e35c7fac66f86a7][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [31m-[0m destroy[0m
+
+Terraform will perform the following actions:
+
+[1m  # docker_container.vault-docker-lab-grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_container" "vault-docker-lab-grafana" {
+      [31m-[0m[0m attach                                      = false [90m-> null[0m[0m
+      [31m-[0m[0m command                                     = [] [90m-> null[0m[0m
+      [31m-[0m[0m container_read_refresh_timeout_milliseconds = 15000 [90m-> null[0m[0m
+      [31m-[0m[0m cpu_shares                                  = 0 [90m-> null[0m[0m
+      [31m-[0m[0m dns                                         = [] [90m-> null[0m[0m
+      [31m-[0m[0m dns_opts                                    = [] [90m-> null[0m[0m
+      [31m-[0m[0m dns_search                                  = [] [90m-> null[0m[0m
+      [31m-[0m[0m entrypoint                                  = [
+          [31m-[0m[0m "/run.sh",
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m env                                         = [] [90m-> null[0m[0m
+      [31m-[0m[0m group_add                                   = [] [90m-> null[0m[0m
+      [31m-[0m[0m hostname                                    = "grafana" [90m-> null[0m[0m
+      [31m-[0m[0m id                                          = "bdddce33cb2a14f091201c944897531202058bbccb4454609e35c7fac66f86a7" [90m-> null[0m[0m
+      [31m-[0m[0m image                                       = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m init                                        = false [90m-> null[0m[0m
+      [31m-[0m[0m ipc_mode                                    = "private" [90m-> null[0m[0m
+      [31m-[0m[0m log_driver                                  = "json-file" [90m-> null[0m[0m
+      [31m-[0m[0m log_opts                                    = {} [90m-> null[0m[0m
+      [31m-[0m[0m logs                                        = false [90m-> null[0m[0m
+      [31m-[0m[0m max_retry_count                             = 0 [90m-> null[0m[0m
+      [31m-[0m[0m memory                                      = 0 [90m-> null[0m[0m
+      [31m-[0m[0m memory_swap                                 = 0 [90m-> null[0m[0m
+      [31m-[0m[0m must_run                                    = true [90m-> null[0m[0m
+      [31m-[0m[0m name                                        = "grafana" [90m-> null[0m[0m
+      [31m-[0m[0m network_data                                = [
+          [31m-[0m[0m {
+              [31m-[0m[0m gateway                   = "10.1.42.1"
+              [31m-[0m[0m global_ipv6_prefix_length = 0
+              [31m-[0m[0m ip_address                = "10.1.42.202"
+              [31m-[0m[0m ip_prefix_length          = 24
+              [31m-[0m[0m mac_address               = "02:42:0a:01:2a:ca"
+              [31m-[0m[0m network_name              = "vault_docker_lab_network"
+                [90m# (2 unchanged attributes hidden)[0m[0m
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m network_mode                                = "bridge" [90m-> null[0m[0m
+      [31m-[0m[0m privileged                                  = false [90m-> null[0m[0m
+      [31m-[0m[0m publish_all_ports                           = false [90m-> null[0m[0m
+      [31m-[0m[0m read_only                                   = false [90m-> null[0m[0m
+      [31m-[0m[0m remove_volumes                              = true [90m-> null[0m[0m
+      [31m-[0m[0m restart                                     = "no" [90m-> null[0m[0m
+      [31m-[0m[0m rm                                          = false [90m-> null[0m[0m
+      [31m-[0m[0m runtime                                     = "runc" [90m-> null[0m[0m
+      [31m-[0m[0m security_opts                               = [] [90m-> null[0m[0m
+      [31m-[0m[0m shm_size                                    = 64 [90m-> null[0m[0m
+      [31m-[0m[0m start                                       = true [90m-> null[0m[0m
+      [31m-[0m[0m stdin_open                                  = false [90m-> null[0m[0m
+      [31m-[0m[0m stop_timeout                                = 0 [90m-> null[0m[0m
+      [31m-[0m[0m storage_opts                                = {} [90m-> null[0m[0m
+      [31m-[0m[0m sysctls                                     = {} [90m-> null[0m[0m
+      [31m-[0m[0m tmpfs                                       = {} [90m-> null[0m[0m
+      [31m-[0m[0m tty                                         = false [90m-> null[0m[0m
+      [31m-[0m[0m user                                        = "472" [90m-> null[0m[0m
+      [31m-[0m[0m wait                                        = false [90m-> null[0m[0m
+      [31m-[0m[0m wait_timeout                                = 60 [90m-> null[0m[0m
+      [31m-[0m[0m working_dir                                 = "/usr/share/grafana" [90m-> null[0m[0m
+        [90m# (6 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m networks_advanced {
+          [31m-[0m[0m aliases      = [] [90m-> null[0m[0m
+          [31m-[0m[0m ipv4_address = "10.1.42.202" [90m-> null[0m[0m
+          [31m-[0m[0m name         = "vault_docker_lab_network" [90m-> null[0m[0m
+            [90m# (1 unchanged attribute hidden)[0m[0m
+        }
+
+      [31m-[0m[0m ports {
+          [31m-[0m[0m external = 3001 [90m-> null[0m[0m
+          [31m-[0m[0m internal = 3000 [90m-> null[0m[0m
+          [31m-[0m[0m ip       = "0.0.0.0" [90m-> null[0m[0m
+          [31m-[0m[0m protocol = "tcp" [90m-> null[0m[0m
+        }
+
+      [31m-[0m[0m volumes {
+          [31m-[0m[0m container_path = "/etc/grafana/grafana.crt" [90m-> null[0m[0m
+          [31m-[0m[0m host_path      = "/Users/brian/tmp/learn-vault-docker-lab/containers/grafana/certs/server_cert.pem" [90m-> null[0m[0m
+          [31m-[0m[0m read_only      = false [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+      [31m-[0m[0m volumes {
+          [31m-[0m[0m container_path = "/etc/grafana/grafana.key" [90m-> null[0m[0m
+          [31m-[0m[0m host_path      = "/Users/brian/tmp/learn-vault-docker-lab/containers/grafana/certs/server_key.pem" [90m-> null[0m[0m
+          [31m-[0m[0m read_only      = false [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+      [31m-[0m[0m volumes {
+          [31m-[0m[0m container_path = "/etc/grafana/provisioning/datasources/prometheus_datasource.yml" [90m-> null[0m[0m
+          [31m-[0m[0m host_path      = "/Users/brian/tmp/learn-vault-docker-lab/containers/grafana/datasource.yml" [90m-> null[0m[0m
+          [31m-[0m[0m read_only      = false [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+        }
+    }
+
+[1m  # docker_image.grafana[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "docker_image" "grafana" {
+      [31m-[0m[0m id           = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m image_id     = "sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54" [90m-> null[0m[0m
+      [31m-[0m[0m keep_locally = true [90m-> null[0m[0m
+      [31m-[0m[0m name         = "grafana/grafana-enterprise:latest" [90m-> null[0m[0m
+      [31m-[0m[0m repo_digest  = "grafana/grafana-enterprise@sha256:3add10ecf53d5115cb95f1305d3bc810397e4bf5176570976fdb03aac9d3ba67" [90m-> null[0m[0m
+    }
+
+[1mPlan:[0m 0 to add, 0 to change, 2 to destroy.
+[0m[0m[1mdocker_container.vault-docker-lab-grafana: Destroying... [id=bdddce33cb2a14f091201c944897531202058bbccb4454609e35c7fac66f86a7][0m[0m
+[0m[1mdocker_container.vault-docker-lab-grafana: Destruction complete after 0s[0m
+[0m[1mdocker_image.grafana: Destroying... [id=sha256:7961b3bc02c50797f86d206f0ff9d4455ac13b0962b6872abe73a7e25fa4bd54grafana/grafana-enterprise:latest][0m[0m
+[0m[1mdocker_image.grafana: Destruction complete after 0s[0m
+[0m[1m[32m
+Destroy complete! Resources: 2 destroyed.
+[0m

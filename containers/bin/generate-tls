@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+# generate the TLS material for vault-docker-lab
+# This material (including the certificate authorities) regenerated annually
+
+here="$(basename $PWD)"
+root_token="root"
+
+if [ $here != 'containers' ]
+  then
+     echo "Please execute $(basename $0) from the containers directory"
+     exit 1
+fi
+
+# using dev mode
+VAULT_ADDR=http://127.0.0.1:8200
+VAULT_TOKEN=root
+
+function check_deps() {
+    printf "Check dependencies ..."
+    local status="$(which yq > /dev/null 2>&1;printf $?)"
+    if [ $status != '0' ]
+      then
+        echo 'NOT OK'
+        echo "yq is not installed or available on PATH."
+        exit 1
+    echo "OK"
+    fi
+}
+
+function check_vault() {
+    printf "Check Vault ..."
+    local status="$(vault status > /dev/null 2>&1;printf $?)"
+    if [ $status != '0' ]
+      then
+        echo 'NOT OK'
+        echo "Vault is not available or not unsealed. Check it and try again."
+        exit 1
+    echo "Vault status OK"
+    fi
+}
+
+function vault_login() {
+    printf "Vault login ..."
+    if vault login -no-print ${root_token}
+        then
+            echo "OK"
+        else
+            echo "NOT OK"
+        exit 1
+    fi
+}
+
+function generate_root_ca() {
+    printf "Generate Root CA for 1 year ..."
+    vault secrets enable pki
+    vault secrets tune -max-lease-ttl=87600h pki
+    vault write -field=certificate pki/root/generate/internal \
+        common_name="vault-docker-lab.lan" \
+        issuer_name="root-2025" \
+        ttl=87600h > root_2025_ca.crt
+    vault write pki/roles/2025-servers \
+        allow_any_name=true \
+        allow_subdomains=true \
+        allow_localhost=true
+    vault write pki/config/urls \
+        issuing_certificates="$VAULT_ADDR/v1/pki/ca" \
+        crl_distribution_points="$VAULT_ADDR/v1/pki/crl"
+    echo "OK"
+}
+
+function generate_intermediate_ca() {
+    printf "Generate intermediate CA ..."
+    vault secrets enable -path=pki_int pki
+    vault secrets tune -max-lease-ttl=43800h pki_int
+    vault write -format=json pki_int/intermediate/generate/internal \
+        common_name="vault-docker-lab.lan Intermediate Authority" \
+        issuer_name="vault-docker-lab-dot-lan-intermediate" \
+        | jq -r '.data.csr' > pki_intermediate.csr
+    vault write -format=json pki/root/sign-intermediate \
+        issuer_ref="root-2025" \
+        csr=@pki_intermediate.csr \
+        format=pem_bundle ttl="43800h" \
+        | jq -r '.data.certificate' > intermediate.cert.pem
+    vault write pki_int/intermediate/set-signed certificate=@intermediate.cert.pem
+    vault write pki_int/roles/vault-docker-lab-dot-lan \
+        issuer_ref="$(vault read -field=default pki_int/config/issuers)" \
+        allowed_domains="vault-docker-lab.lan" \
+        allow_subdomains=true \
+        allow_localhost=true \
+        allow_any_name=true \
+        max_ttl="8760h"
+     echo "OK"
+}
+
+function generate_certs_and_keys() {
+    echo "Generate certificates and keys ..."
+    export tls_vault1=$(vault write pki_int/issue/vault-docker-lab-dot-lan alt_names="localhost" common_name="vault-1.vault-docker-lab.lan" ip_sans="127.0.0.1,10.1.42.101" ttl="8760h" -format=yaml)
+    export tls_vault2=$(vault write pki_int/issue/vault-docker-lab-dot-lan alt_names="localhost" common_name="vault-2.vault-docker-lab.lan" ip_sans="127.0.0.1,10.1.42.102" ttl="8760h" -format=yaml)
+    export tls_vault3=$(vault write pki_int/issue/vault-docker-lab-dot-lan alt_names="localhost" common_name="vault-3.vault-docker-lab.lan" ip_sans="127.0.0.1,10.1.42.103" ttl="8760h" -format=yaml)
+    export tls_vault4=$(vault write pki_int/issue/vault-docker-lab-dot-lan alt_names="localhost" common_name="vault-4.vault-docker-lab.lan" ip_sans="127.0.0.1,10.1.42.104" ttl="8760h" -format=yaml)
+    export tls_vault5=$(vault write pki_int/issue/vault-docker-lab-dot-lan alt_names="localhost" common_name="vault-5.vault-docker-lab.lan" ip_sans="127.0.0.1,10.1.42.105" ttl="8760h" -format=yaml)
+    export tls_loadbalancer=$(vault write pki_int/issue/vault-docker-lab-dot-lan alt_names="localhost" common_name="loadbalancer.vault-docker-lab.lan" ip_sans="127.0.0.1,10.1.42.10" ttl="8760h" -format=yaml)
+    export tls_prometheus=$(vault write pki_int/issue/vault-docker-lab-dot-lan alt_names="localhost" common_name="prometheus.vault-docker-lab.lan" ip_sans="127.0.0.1,10.1.42.211" ttl="8760h" -format=yaml)
+    export tls_grafana=$(vault write pki_int/issue/vault-docker-lab-dot-lan alt_names="localhost" common_name="grafana.vault-docker-lab.lan" ip_sans="127.0.0.1,10.1.42.212" ttl="8760h" -format=yaml)
+}
+
+function install_tls() {
+    echo "$tls_vault1" | yq '.data.certificate' > ./vault_docker_lab_1/certs/server-cert.pem
+    echo "$tls_vault1" | yq '.data.private_key' > ./vault_docker_lab_1/certs/server-key.pem
+    echo "$tls_vault1" | yq '.data.ca_chain' | grep -v '\- |\-' > ./vault_docker_lab_1/certs/vault-docker-lab-ca-chain.pem
+    echo "$tls_vault1" | yq '.data.issuing_ca' > ./vault_docker_lab_1/certs/vault-docker-lab-ca.pem
+
+    echo "$tls_vault2" | yq '.data.certificate' > ./vault_docker_lab_2/certs/server-cert.pem
+    echo "$tls_vault2" | yq '.data.private_key' > ./vault_docker_lab_2/certs/server-key.pem
+    echo "$tls_vault2" | yq '.data.ca_chain' | grep -v '\- |\-' > ./vault_docker_lab_2/certs/vault-docker-lab-ca-chain.pem
+    echo "$tls_vault2" | yq '.data.issuing_ca' > ./vault_docker_lab_2/certs/vault-docker-lab-ca.pem
+
+    echo "$tls_vault3" | yq '.data.certificate' > ./vault_docker_lab_3/certs/server-cert.pem
+    echo "$tls_vault3" | yq '.data.private_key' > ./vault_docker_lab_3/certs/server-key.pem
+    echo "$tls_vault3" | yq '.data.ca_chain' | grep -v '\- |\-' > ./vault_docker_lab_3/certs/vault-docker-lab-ca-chain.pem
+    echo "$tls_vault3" | yq '.data.issuing_ca' > ./vault_docker_lab_3/certs/vault-docker-lab-ca.pem
+
+    echo "$tls_vault4" | yq '.data.certificate' > ./vault_docker_lab_4/certs/server-cert.pem
+    echo "$tls_vault4" | yq '.data.private_key' > ./vault_docker_lab_4/certs/server-key.pem
+    echo "$tls_vault4" | yq '.data.ca_chain' | grep -v '\- |\-' > ./vault_docker_lab_4/certs/vault-docker-lab-ca-chain.pem
+    echo "$tls_vault4" | yq '.data.issuing_ca' > ./vault_docker_lab_4/certs/vault-docker-lab-ca.pem
+
+    echo "$tls_vault5" | yq '.data.certificate' > ./vault_docker_lab_5/certs/server-cert.pem
+    echo "$tls_vault5" | yq '.data.private_key' > ./vault_docker_lab_5/certs/server-key.pem
+    echo "$tls_vault5" | yq '.data.ca_chain' | grep -v '\- |\-' > ./vault_docker_lab_5/certs/vault-docker-lab-ca-chain.pem
+    echo "$tls_vault5" | yq '.data.issuing_ca' > ./vault_docker_lab_5/certs/vault-docker-lab-ca.pem
+
+    echo "$tls_loadbalancer" | yq '.data.certificate' > ./caddy/conf/server-cert.pem
+    echo "$tls_loadbalancer" | yq '.data.private_key' > ./caddy/conf/server-key.pem
+    echo "$tls_loadbalancer" | yq '.data.ca_chain' | grep -v '\- |\-' > ./caddy/conf/vault-docker-lab-ca-chain.pem
+    echo "$tls_loadbalancer" | yq '.data.issuing_ca' > ./caddy/conf/vault-docker-lab-ca.pem
+
+    echo "$tls_prometheus" | yq '.data.certificate' > ./prometheus/certs/server-cert.pem
+    echo "$tls_prometheus" | yq '.data.private_key' > ./prometheus/certs/server-key.pem
+    echo "$tls_prometheus" | yq '.data.ca_chain' | grep -v '\- |\-' > ./prometheus/certs/vault-docker-lab-ca-chain.pem
+    echo "$tls_prometheus" | yq '.data.issuing_ca' > ./prometheus/certs/vault-docker-lab-ca.pem
+
+    echo "$tls_grafana" | yq '.data.certificate' > ./grafana/certs/server-cert.pem
+    echo "$tls_grafana" | yq '.data.private_key' > ./grafana/certs/server-key.pem
+    echo "$tls_grafana" | yq '.data.ca_chain' | grep -v '\- |\-' > ./grafana/certs/vault-docker-lab-ca-chain.pem
+    echo "$tls_tls_grafana" | yq '.data.issuing_ca' > ./grafana/certs/vault-docker-lab-ca.pem
+}
+
+function cleanup() {
+    rm -f root_2025_ca.crt pki_intermediate.csr intermediate.cert.pem
+}
+
+function main() {
+check_vault
+vault_login
+generate_root_ca
+generate_intermediate_ca
+generate_certs_and_keys
+install_tls
+cleanup
+}
+
+main
