@@ -159,10 +159,10 @@ There are just a handful of steps to make your own Vault Docker Lab.
    [vault-docker-lab] Applying Terraform configuration ...Done.
    [vault-docker-lab] Checking Vault active node status ...Done.
    [vault-docker-lab] Checking Vault initialization status ...Done.
-   [vault-docker-lab] Unsealing cluster nodes .....vault_docker_lab_2. vault_docker_lab_3. vault_docker_lab_4. vault_docker_lab_5. Done.
+   [vault-docker-lab] Unsealing cluster nodes .....node 2. node 3. node 4. node 5. Done.
    [vault-docker-lab] Enable audit device ...Done.
-   [vault-docker-lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
-   [vault-docker-lab] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
+   [vault-docker-lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://localhost:8200
+   [vault-docker-lab] Login to Vault with initial root token: vault login hvs.6Eq3tM7Lc0ff33cq7r9WRFFD
    ```
 
 1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value.

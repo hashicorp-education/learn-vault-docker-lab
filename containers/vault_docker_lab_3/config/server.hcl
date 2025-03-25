@@ -24,3 +24,8 @@ storage "raft" {
   }
 
 }
+
+telemetry {
+  prometheus_retention_time = "48h"
+  disable_hostname          = true
+}

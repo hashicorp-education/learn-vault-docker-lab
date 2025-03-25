@@ -15,3 +15,8 @@ storage "raft" {
   path    = "/vault"
   node_id = "vault-1"
 }
+
+telemetry {
+  prometheus_retention_time = "48h"
+  disable_hostname          = true
+}

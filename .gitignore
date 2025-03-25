@@ -9,4 +9,5 @@ terraform.tfstate
 terraform.tfstate.backup
 containers/vault_docker_lab_?/data/*
 containers/vault_docker_lab_?/logs/*
+containers/prometheus/prometheus-token
 vault_docker_lab.log

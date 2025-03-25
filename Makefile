@@ -1,6 +1,7 @@
 MY_NAME_IS := [vault-docker-lab]
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 UNAME := $$(uname)
+PROMETHEUS_TOKEN = ./containers/prometheus/prometheus-token
 VAULT_DOCKER_LAB_AUDIT_LOGS = ./containers/vault_docker_lab_?/logs/*
 VAULT_DOCKER_LAB_DATA = ./containers/vault_docker_lab_?/data/*
 VAULT_DOCKER_LAB_INIT = ./.vault_docker_lab_?_init
@@ -12,12 +13,14 @@ all: prerequisites provision vault_status unseal_nodes audit_device done
 
 stage: prerequisites provision done-stage
 
+with-monitoring: prometheus grafana
+
 done:
-	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"
+	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://localhost:8200"
 	@echo "$(MY_NAME_IS) Login to Vault with initial root token: vault login $$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}')"
 
 done-stage:
-	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"
+	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://localhost:8200"
 	@echo "$(MY_NAME_IS) Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use."
 
 DOCKER_OK=$$(docker info > /dev/null 2>&1; printf $$?)
@@ -27,6 +30,24 @@ prerequisites:
 	@if [ $(VAULT_BINARY_OK) -ne 0 ] ; then echo "$(MY_NAME_IS) Vault binary not found in path!"; echo "$(MY_NAME_IS) Install Vault and try again: https://developer.hashicorp.com/vault/downloads." ; exit 1 ; fi
 	@if [ $(TERRAFORM_BINARY_OK) -ne 0 ] ; then echo "$(MY_NAME_IS) Terraform CLI binary not found in path!" ; echo "$(MY_NAME_IS) Install Terraform CLI and try again: https://developer.hashicorp.com/terraform/downloads" ; exit 1 ; fi
 	@if [ $(DOCKER_OK) -ne 0 ] ; then echo "$(MY_NAME_IS) Cannot get Docker info; ensure that Docker is running, and try again." ; exit 1 ; fi
+
+prometheus-token-policy:
+	@printf "$(MY_NAME_IS) Add Prometheus ACL policy ..."
+	@printf 'path "/sys/metrics" {capabilities = ["read"]}' | VAULT_ADDR=https://127.0.0.1:8220 VAULT_TOKEN=$$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}') vault policy write prometheus - > /dev/null 2>&1
+	@echo 'Done.'
+
+prometheus-token:
+	@printf "$(MY_NAME_IS) Generate Prometheus token ..."
+	@VAULT_ADDR=https://127.0.0.1:8220 VAULT_TOKEN=$$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}') vault token create -policy=prometheus -field=token > $(PROMETHEUS_TOKEN)
+	@echo 'Done.'
+
+prometheus-deploy:
+	@printf "$(MY_NAME_IS) Deploy Prometheus ..."
+	@cd containers/prometheus && terraform init >> $(VAULT_DOCKER_LAB_LOG_FILE)
+	@cd containers/prometheus && terraform apply -auto-approve >> $(VAULT_DOCKER_LAB_LOG_FILE)
+	@echo 'Done.'
+
+prometheus: prometheus-token-policy prometheus-token prometheus-deploy
 
 provision:
 	@if [ "$(UNAME)" = "Linux" ]; then echo "$(MY_NAME_IS) [Linux] Setting ownership on container volume directories ..."; echo "$(MY_NAME_IS) [Linux] You could be prompted for your user password by sudo."; sudo chown -R $$USER:$$USER containers; sudo chmod -R 0777 containers; fi
@@ -54,10 +75,9 @@ unseal_nodes:
 	@printf 'node 5. '
 	@echo 'Done.'
 
-ROOT_TOKEN=$$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}')
 audit_device:
 	@printf "$(MY_NAME_IS) Enable audit device ..."
-	@VAULT_ADDR=https://127.0.0.1:8220 VAULT_TOKEN=$(ROOT_TOKEN) vault audit enable file file_path=/vault/logs/vault_audit.log > /dev/null 2>&1
+	@VAULT_ADDR=https://127.0.0.1:8220 VAULT_TOKEN=$$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}') vault audit enable file file_path=/vault/logs/vault_audit.log > /dev/null 2>&1
 	@echo 'Done.'
 
 vault_status:
@@ -68,9 +88,13 @@ vault_status:
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8200 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
 	@echo 'Done.'
 
-clean:
+PROMETHEUS_CONTAINER = $$(docker ps -f name=prometheus >/dev/null 2>&1; printf $$?)
+clean-prometheus:
+	@if [ "$(PROMETHEUS_CONTAINER)" = "0" ]; then printf "$(MY_NAME_IS) Clean up Prometheus ..."; cd ./containers/prometheus && terraform destroy -auto-approve >/dev/null 2>&1 && rm -f $(PROMETHEUS_TOKEN); echo 'Done.'; fi
+
+clean-main:
 	@if [ "$(UNAME)" = "Linux" ]; then echo "$(MY_NAME_IS) [Linux] Setting ownership on container volume directories ..."; echo "$(MY_NAME_IS) [Linux] You could be prompted for your user password by sudo."; sudo chown -R $$USER:$$USER containers; fi
-	@printf "$(MY_NAME_IS) Destroying Terraform configuration ..."
+	@printf "$(MY_NAME_IS) Clean up Vault ..."
 	@terraform destroy -auto-approve >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@echo 'Done.'
 	@printf "$(MY_NAME_IS) Removing artifacts created by vault-docker-lab ..."
@@ -79,6 +103,8 @@ clean:
 	@rm -rf $(VAULT_DOCKER_LAB_AUDIT_LOGS)
 	@rm -f $(VAULT_DOCKER_LAB_LOG_FILE)
 	@echo 'Done.'
+
+clean: clean-prometheus clean-main 
 
 cleanest: clean
 	@printf "$(MY_NAME_IS) Removing all Terraform runtime configuration and state ..."
