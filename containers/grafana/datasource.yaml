@@ -1,6 +1,11 @@
 # config file version
 apiVersion: 1
 
+server:
+  http_tls_config:
+    client_ca_file: "/etc/grafana/vault-docker-lab-ca.crt"
+    cert_file: "/etc/grafana/grafana.crt"
+    key_file: "/etc/grafana/grafana.key"
 datasources:
   - name: vault
     type: prometheus
@@ -14,14 +19,14 @@ datasources:
     basicAuthUser:
     basicAuthPassword:
     withCredentials:
-    isDefault:
+    isDefault: true
     jsonData:
       graphiteVersion: "1.1"
       tlsAuth: false
       tlsAuthWithCACert: false
     secureJsonData:
-      tlsCACert: ""
-      tlsClientCert: ""
-      tlsClientKey: ""
+      tlsCACert: "/etc/grafana/vault-docker-lab-ca.pem"
+      tlsClientCert: "/etc/grafana/grafana.crt"
+      tlsClientKey: "/etc/grafana/grafana.key"
     version: 1
     editable: true

@@ -13,7 +13,7 @@ all: prerequisites provision vault_status unseal_nodes audit_device done
 
 stage: prerequisites provision done-stage
 
-with-monitoring: prometheus grafana
+with-monitoring: prerequisites provision vault_status unseal_nodes audit_device prometheus grafana done-with-monitoring
 
 done:
 	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://localhost:8200"
@@ -22,6 +22,18 @@ done:
 done-stage:
 	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://localhost:8200"
 	@echo "$(MY_NAME_IS) Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use."
+
+done-with-monitoring:
+	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://localhost:8200"
+	@echo "$(MY_NAME_IS) Login to Vault with initial root token: vault login $$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}')"
+	@echo "$(MY_NAME_IS) Prometheus is available at: https://localhost:9090"
+	@echo "$(MY_NAME_IS) Grafana is available at: http://localhost:3001"
+
+grafana:
+	@printf "$(MY_NAME_IS) Deploy Grafana ..."
+	@cd containers/grafana && terraform init >> $(VAULT_DOCKER_LAB_LOG_FILE)
+	@cd containers/grafana && terraform apply -auto-approve >> $(VAULT_DOCKER_LAB_LOG_FILE)
+	@echo 'Done.'
 
 DOCKER_OK=$$(docker info > /dev/null 2>&1; printf $$?)
 TERRAFORM_BINARY_OK=$$(which terraform > /dev/null 2>&1 ; printf $$?)
@@ -88,6 +100,10 @@ vault_status:
 	@until [ $$(VAULT_ADDR=https://127.0.0.1:8200 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
 	@echo 'Done.'
 
+GRAFANA_CONTAINER = $$(docker ps -f name=grafana >/dev/null 2>&1; printf $$?)
+clean-grafana:
+	@if [ "$(GRAFANA_CONTAINER)" = "0" ]; then printf "$(MY_NAME_IS) Clean up Grafana ..."; cd ./containers/grafana && terraform destroy -auto-approve >/dev/null 2>&1 && echo 'Done.'; fi
+
 PROMETHEUS_CONTAINER = $$(docker ps -f name=prometheus >/dev/null 2>&1; printf $$?)
 clean-prometheus:
 	@if [ "$(PROMETHEUS_CONTAINER)" = "0" ]; then printf "$(MY_NAME_IS) Clean up Prometheus ..."; cd ./containers/prometheus && terraform destroy -auto-approve >/dev/null 2>&1 && rm -f $(PROMETHEUS_TOKEN); echo 'Done.'; fi
@@ -104,7 +120,7 @@ clean-main:
 	@rm -f $(VAULT_DOCKER_LAB_LOG_FILE)
 	@echo 'Done.'
 
-clean: clean-prometheus clean-main 
+clean: clean-grafana clean-prometheus clean-main 
 
 cleanest: clean
 	@printf "$(MY_NAME_IS) Removing all Terraform runtime configuration and state ..."

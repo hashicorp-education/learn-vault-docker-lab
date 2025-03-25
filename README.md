@@ -205,6 +205,22 @@ TF_VAR_vault_version=1.11.0 make
 
 > **Tip**: Vault versions >= 1.11.0 are ideal for Integrated Storage support.
 
+### Enable monitoring stack
+
+The Vault Docker lab ships with Prometheus and Grafana configured to function with the cluster active leader node.
+
+You can enable Prometheus with:
+
+```shell
+make prometheus
+```
+
+You can enable Grafana with:
+
+```shell
+make grafana
+```
+
 ### Run Vault Enterprise
 
 Vault Docker Lab runs the Vault community edition by default, but you can also run the Enterprise edition.

@@ -28,6 +28,7 @@ resource "docker_container" "vault-docker-lab-grafana" {
   name     = "grafana"
   hostname = "grafana"
   image    = docker_image.grafana.repo_digest
+  env      = ["GF_SECURITY_ADMIN_USER=admin", "GF_SECURITY_ADMIN_PASSWORD=2LearnVault", "GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/vault.json"]
   must_run = true
   rm       = false
 
@@ -42,9 +43,36 @@ resource "docker_container" "vault-docker-lab-grafana" {
     protocol = "tcp"
   }
 
+# -----------------------------------------------------------------------
+# Main configuration
+# -----------------------------------------------------------------------
+
   volumes {
-    host_path      = "${path.cwd}/datasource.yml"
+    host_path      = "${path.cwd}/datasource.yaml"
     container_path = "/etc/grafana/provisioning/datasources/prometheus_datasource.yml"
+  }
+
+# -----------------------------------------------------------------------
+# Dashboards configuration
+# -----------------------------------------------------------------------
+
+  volumes {
+    host_path      = "${path.cwd}/dashboards"
+    container_path = "/var/lib/grafana/dashboards"
+  }
+
+  volumes {
+    host_path      = "${path.cwd}/dashboards.yaml"
+    container_path = "/etc/grafana/provisioning/dashboards/main.yaml"
+  }
+
+# -----------------------------------------------------------------------
+# TLS configuration
+# -----------------------------------------------------------------------
+
+  volumes {
+    host_path      = "${path.cwd}/certs/vault-docker-lab-ca.pem"
+    container_path = "/etc/grafana/vault-docker-lab-ca.crt"
   }
 
   volumes {
