@@ -70,7 +70,7 @@ resource "docker_container" "vault-docker-lab" {
   }
 
   healthcheck {
-    test         = ["CMD", "vault", "status"]
+    test         = ["CMD-SHELL", "VAULT_ADDR=https://127.0.0.1:8200 VAULT_CACERT=/vault/certs/vault_docker_lab_ca.pem vault status >/dev/null 2>&1"]
     interval     = "10s"
     timeout      = "2s"
     start_period = "10s"

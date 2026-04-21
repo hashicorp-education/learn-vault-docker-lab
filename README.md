@@ -1,22 +1,19 @@
 # Vault Docker Lab
 
-```plaintext
- _   __          ____    ___           __             __        __ 
-| | / /__ ___ __/ / /_  / _ \___  ____/ /_____ ____  / /  ___ _/ / 
-| |/ / _ `/ // / / __/ / // / _ \/ __/  '_/ -_) __/ / /__/ _ `/ _ \
-|___/\_,_/\_,_/_/\__/ /____/\___/\__/_/\_\\__/_/   /____/\_,_/_.__/
-                                                                   
-Vault Docker Lab is a minimal Vault cluster Terraformed onto Docker containers.
-It is useful for development and testing, but not for production.
-```
+      _   __          ____    ___           __             __        __ 
+     | | / /__ ___ __/ / /_  / _ \___  ____/ /_____ ____  / /  ___ _/ / 
+     | |/ / _ `/ // / / __/ / // / _ \/ __/  '_/ -_) __/ / /__/ _ `/ _ \
+     |___/\_,_/\_,_/_/\__/ /____/\___/\__/_/\_\\__/_/   /____/\_,_/_.__/
 
 ## What?
 
-Vault Docker Lab is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault Docker image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). It is powered by a `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs).
+Vault Docker Lab is a minimal 5-node [Vault](https://www.vaultproject.io) cluster running the official [Vault Docker image](https://hub.docker.com/_/vault/) with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) on [Docker](https://www.docker.com/products/docker-desktop/). 
+
+Deploy Vault Docker Lab with a `Makefile`, [Terraform CLI](https://developer.hashicorp.com/terraform/cli), and the [Terraform Docker Provider](https://registry.terraform.io/providers/kreuzwerker/docker/latest/docs).
 
 ## Why?
 
-To quickly establish a local Vault cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, and testing.
+To establish a local Vault cluster with [Integrated Storage](https://developer.hashicorp.com/vault/docs/configuration/storage/raft) for development, education, and testing.
 
 ## How?
 
@@ -26,15 +23,18 @@ You can make your own Vault Docker Lab with Docker, Terraform, and the Terraform
 
 To make a Vault Docker Lab, your host computer must have the following software installed:
 
-- [Docker](https://www.docker.com/products/docker-desktop/) (tested with Docker Desktop version 4.22.1 on macOS version 13.5.1)
+- [Docker](https://www.docker.com/products/docker-desktop/) (tested with Docker Desktop version 4.70.0 on macOS version 26.3.1)
 
-- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.5.6 darwin_arm64 on macOS version 13.5.1)
+- [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) binary installed in your system PATH (tested with version 1.9.3 darwin_arm64 on macOS version 26.3.1)
 
-> **NOTE:** Vault Docker Lab is currently known to function on Linux (last tested on Ubuntu 22.04) and macOS with Intel or Apple silicon processors.
+> [!NOTE]
+> Vault Docker Lab functions on Linux (last tested on Ubuntu 24.04)
+> and macOS with Intel or Apple silicon processors.
 
 ## Make your own Vault Docker Lab
 
-There are just a handful of steps to make your own Vault Docker Lab.
+There are just a handful of steps you need to perform to make your own 
+Vault Docker Lab.
 
 1. Clone this repository.
 
@@ -48,7 +48,24 @@ There are just a handful of steps to make your own Vault Docker Lab.
    cd learn-vault-docker-lab
    ```
 
+1. Generate a fresh set of TLS materials for the lab containers.
+
+   ```shell
+   bash ./scripts/refresh-tls.sh
+   ```
+
+   This script starts an ephemeral Vault dev mode server in Docker, recreates the root and intermediate PKI mounts described in [`containers/README-TLS.md`](./containers/README-TLS.md), issues a new certificate and key for each Vault node, and installs the generated files into each `containers/vault_docker_lab_*/certs` directory.
+
+   If you want to manually run the PKI workflow instead, use [`containers/README-TLS.md`](./containers/README-TLS.md) as the manual step-by-step reference.
+
 1. Add the Vault Docker Lab Certificate Authority certificate to your operating system trust store.
+
+   > [!TIP]
+   > If you don't want to add the certificate, you can export the
+   > VAULT_CACERT environment variable instead, and point it at the CA cert:
+   >
+   > `export VAULT_CACERT=./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem`
+   >
 
    - For macOS:
 
@@ -58,7 +75,8 @@ There are just a handful of steps to make your own Vault Docker Lab.
         ./containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem
      ```
 
-     > **NOTE**: You will be prompted for your user password and sometimes could be prompted twice; enter your user password as needed to add the certificate.
+     > [!NOTE]
+     > The OS prompts for your user password and can sometimes prompt twice; enter your user password as needed to add the certificate.
 
    - For Linux:
 
@@ -172,18 +190,31 @@ There are just a handful of steps to make your own Vault Docker Lab.
    [vault-docker-lab] Unsealing cluster nodes .....vault_docker_lab_2. vault_docker_lab_3. vault_docker_lab_4. vault_docker_lab_5. Done.
    [vault-docker-lab] Enable audit device ...Done.
    [vault-docker-lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+   [vault-docker-lab] Export VAULT_CACERT for the active node: export VAULT_CACERT=/path/to/learn-vault-docker-lab/containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem
    [vault-docker-lab] Login to Vault with initial root token: vault login hvs.euAmS2Wc0ff3339uxTKYVtqK
    ```
 
-1. Follow the instructions to set an appropriate `VAULT_ADDR` environment variable, and login to Vault with the initial root token value.
+1. Follow the instructions to set appropriate `VAULT_ADDR` and `VAULT_CACERT` environment variables, and login to Vault with the initial root token value.
+
+   ```shell
+   export VAULT_ADDR=https://127.0.0.1:8200
+   export VAULT_CACERT=$PWD/containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem
+   ```
 
 ## Notes
 
-The following notes should help you better understand the container structure Vault Docker Lab uses, along with tips on commonly used features.
+The following notes can help you better understand the container structure Vault Docker Lab uses, along with tips on commonly used features.
+
+### TLS certificates
+
+- Automated refresh: [`./scripts/refresh-tls.sh`](./scripts/refresh-tls.sh)
+- Manual PKI walk-through: [`./containers/README-TLS.md`](./containers/README-TLS.md)
+
+Run the script whenever you want to rotate the self-signed lab certificates before starting the cluster.
 
 ### Configuration, data & logs
 
-The configuration, data, and audit device log files live in a subdirectory under `containers` that is named after the server. For example, here is the structure of the first server, _vault_docker_lab_1_ as it appears when active.
+The configuration, data, and audit device log files live in a subdirectory under `containers` named after the server. For example, here is the structure of the first server, _vault_docker_lab_1_ as it appears when active.
 
 ```shell
 $ tree containers/vault_docker_lab_1
@@ -213,7 +244,8 @@ Vault Docker Lab tries to keep current and offer the latest available Vault Dock
 TF_VAR_vault_version=1.11.0 make
 ```
 
-> **Tip**: Vault versions >= 1.11.0 are recommended for ideal Integrated Storage support.
+> [!TIP]
+> Use Vault versions >= 1.11.0 for ideal Integrated Storage support.
 
 ### Run Vault Enterprise
 
@@ -263,6 +295,7 @@ Example output:
 [vault-docker-lab] Initializing Terraform workspace ...Done.
 [vault-docker-lab] Applying Terraform configuration ...Done.
 [vault-docker-lab] Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200
+[vault-docker-lab] Export VAULT_CACERT for the active node: export VAULT_CACERT=/path/to/learn-vault-docker-lab/containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem
 [vault-docker-lab] Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use.
 ```
 
@@ -310,7 +343,7 @@ To remove the CA certificate from your OS trust store:
   # no output expected
   ```
 
-  - You will be prompted for your user password; enter it to add the certificate.
+  - The OS prompts you for your user password; enter it to add the certificate.
 
 - For Linux:
 
