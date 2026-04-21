@@ -5,6 +5,8 @@ VAULT_DOCKER_LAB_AUDIT_LOGS = ./containers/vault_docker_lab_?/logs/*
 VAULT_DOCKER_LAB_DATA = ./containers/vault_docker_lab_?/data/*
 VAULT_DOCKER_LAB_INIT = ./.vault_docker_lab_?_init
 VAULT_DOCKER_LAB_LOG_FILE = ./vault_docker_lab.log
+VAULT_DOCKER_LAB_CA_CERT = $(CURDIR)/containers/vault_docker_lab_1/certs/vault_docker_lab_ca.pem
+VAULT_TLS_ENV = VAULT_CACERT=$(VAULT_DOCKER_LAB_CA_CERT)
 
 default: all
 
@@ -14,10 +16,12 @@ stage: prerequisites provision done-stage
 
 done:
 	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"
+	@echo "$(MY_NAME_IS) Export VAULT_CACERT for the active node: export VAULT_CACERT=$(VAULT_DOCKER_LAB_CA_CERT)"
 	@echo "$(MY_NAME_IS) Login to Vault with initial root token: vault login $$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}')"
 
 done-stage:
 	@echo "$(MY_NAME_IS) Export VAULT_ADDR for the active node: export VAULT_ADDR=https://127.0.0.1:8200"
+	@echo "$(MY_NAME_IS) Export VAULT_CACERT for the active node: export VAULT_CACERT=$(VAULT_DOCKER_LAB_CA_CERT)"
 	@echo "$(MY_NAME_IS) Vault is not initialized or unsealed. You must initialize and unseal Vault prior to use."
 
 DOCKER_OK=$$(docker info > /dev/null 2>&1; printf $$?)
@@ -40,32 +44,32 @@ provision:
 UNSEAL_KEY=$$(grep 'Unseal Key 1' ./.vault_docker_lab_1_init | awk '{print $$NF}')
 unseal_nodes:
 	@printf "$(MY_NAME_IS) Unsealing cluster nodes ..."
-	@until [ $$(VAULT_ADDR=https://127.0.0.1:8220 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
-	@VAULT_ADDR=https://127.0.0.1:8220 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
+	@until [ $$($(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8220 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
+	@$(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8220 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@printf 'node 2. '
-	@until [ $$(VAULT_ADDR=https://127.0.0.1:8230 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
-	@VAULT_ADDR=https://127.0.0.1:8230 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
+	@until [ $$($(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8230 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
+	@$(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8230 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@printf 'node 3. '
-	@until [ $$(VAULT_ADDR=https://127.0.0.1:8240 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
-	@VAULT_ADDR=https://127.0.0.1:8240 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
+	@until [ $$($(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8240 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
+	@$(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8240 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@printf 'node 4. '
-	@until [ $$(VAULT_ADDR=https://127.0.0.1:8250 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
-	@VAULT_ADDR=https://127.0.0.1:8250 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
+	@until [ $$($(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8250 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
+	@$(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8250 vault operator unseal $(UNSEAL_KEY) >> $(VAULT_DOCKER_LAB_LOG_FILE)
 	@printf 'node 5. '
 	@echo 'Done.'
 
 ROOT_TOKEN=$$(grep 'Initial Root Token' ./.vault_docker_lab_1_init | awk '{print $$NF}')
 audit_device:
 	@printf "$(MY_NAME_IS) Enable audit device ..."
-	@VAULT_ADDR=https://127.0.0.1:8220 VAULT_TOKEN=$(ROOT_TOKEN) vault audit enable file file_path=/vault/logs/vault_audit.log > /dev/null 2>&1
+	@$(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8220 VAULT_TOKEN=$(ROOT_TOKEN) vault audit enable file file_path=/vault/logs/vault_audit.log > /dev/null 2>&1
 	@echo 'Done.'
 
 vault_status:
 	@printf "$(MY_NAME_IS) Checking Vault active node status ..."
-	@until [ $$(VAULT_ADDR=https://127.0.0.1:8200 vault status > /dev/null 2>&1 ; printf $$?) -eq 0 ] ; do sleep 1 && printf . ; done
+	@until $(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8200 vault status > /dev/null 2>&1 ; do sleep 1 && printf . ; done
 	@echo 'Done.'
 	@printf "$(MY_NAME_IS) Checking Vault initialization status ..."
-	@until [ $$(VAULT_ADDR=https://127.0.0.1:8200 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
+	@until [ $$($(VAULT_TLS_ENV) VAULT_ADDR=https://127.0.0.1:8200 vault status | grep "Initialized" | awk '{print $$2}') = "true" ] ; do sleep 1 ; printf . ; done
 	@echo 'Done.'
 
 clean:
